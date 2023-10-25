@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
 

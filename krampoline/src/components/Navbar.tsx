@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { PiStackSimple, PiNotePencilLight } from "react-icons/pi";
 import { LiaCalendarCheckSolid } from "react-icons/lia";
