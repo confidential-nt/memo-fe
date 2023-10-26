@@ -1,3 +1,12 @@
-export default function Todo() {
-  return <div>여기는 todo 페이지</div>;
+import React from "react";
+import TodoList from "../components/TodoList";
+
+function Todo() {
+  return (
+    <div>
+      <TodoList />
+    </div>
+  );
 }
+
+export default Todo;
