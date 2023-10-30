@@ -1,18 +1,15 @@
 import { ChangeEvent } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { PiTrashLight, PiPencilLight } from "react-icons/pi";
+import { TodoItem } from "../pages/Todo";
 
-type TaskProps = {
-  todo: {
-    id: string;
-    content: string;
-    status: string;
-  };
-  onUpdate: (todo: { id: string; content: string; status: string }) => void;
-  onDelete: (todo: { id: string; content: string; status: string }) => void;
+type Props = {
+  todo: TodoItem;
+  onUpdate: (todo: TodoItem) => void;
+  onDelete: (todo: TodoItem) => void;
 };
 
-function Task({ todo, onUpdate, onDelete }: TaskProps) {
+function Task({ todo, onUpdate, onDelete }: Props) {
   const { id, content, status } = todo;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
