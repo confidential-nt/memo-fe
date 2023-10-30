@@ -1,0 +1,55 @@
+{
+  "id": "123456",
+  "email": "user@example.com",
+  "directories": [
+    {
+      "id": "dir001",
+      "name": "Personal",
+      "directories": [
+        {
+          "id": "dir001_1",
+          "name": "Travel",
+          "directories": [],
+          "memos": [
+            {
+              "id": "memo001",
+              "title": "Trip to Paris",
+              "content": "Had a wonderful time at the Eiffel Tower."
+            },
+            {
+              "id": "memo002",
+              "title": "Visit to London",
+              "content": "Enjoyed the British Museum and Big Ben."
+            }
+          ]
+        }
+      ],
+      "memos": [
+        {
+          "id": "memo003",
+          "title": "Shopping List",
+          "content": "Milk, Eggs, Bread, Butter."
+        }
+      ]
+    },
+    {
+      "id": "dir002",
+      "name": "Work",
+      "directories": [],
+      "memos": [
+        {
+          "id": "memo004",
+          "title": "Meeting Notes",
+          "content": "Discussed quarterly performance and goals."
+        }
+      ]
+    }
+  ],
+  "memos": [
+    {
+      "id": "memo005",
+      "title": "General Reminder",
+      "content": "Don't forget to call mom on her birthday."
+    }
+  ]
+}
