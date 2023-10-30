@@ -1,7 +1,7 @@
 import { ChangeEvent } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { PiTrashLight, PiPencilLight } from "react-icons/pi";
-import { TodoItem } from "../pages/Todo";
+import { TodoItem } from "../../pages/Todo";
 
 type Props = {
   todo: TodoItem;

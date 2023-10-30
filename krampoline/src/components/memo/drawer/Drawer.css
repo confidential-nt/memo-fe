@@ -1,0 +1,4 @@
+.MuiDrawer-paperAnchorRight {
+  @apply bg-main-purple;
+  @apply p-1;
+}
