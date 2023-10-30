@@ -1,7 +1,7 @@
 import { Tree } from "react-arborist";
-import { Directory } from "../types/Memo.types";
-import { transformData } from "../utils/memo";
-import Node from "./Node";
+import { Directory } from "../../types/Memo.types";
+import { transformData } from "../../utils/memo";
+import Node from "./node/Node";
 
 type Props = {
   memoStore: Directory;

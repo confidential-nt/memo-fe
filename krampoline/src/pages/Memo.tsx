@@ -1,9 +1,9 @@
-import TextEditor from "../components/TextEditor";
-import TreeView from "../components/TreeView";
+import TextEditor from "../components/memo/TextEditor";
+import TreeView from "../components/memo/TreeView";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Directory } from "../types/Memo.types";
-import Drawer from "../components/Drawer";
+import Drawer from "../components/memo/drawer/Drawer";
 
 export default function Memo() {
   const [isDrawerOpened, setDrawerOpened] = useState(false);

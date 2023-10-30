@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Tasks from "../components/Tasks";
+import Tasks from "../components/todo/Tasks";
 
 export type TodoItem = {
   id: string;

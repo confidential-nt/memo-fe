@@ -1,5 +1,5 @@
 import { NodeApi } from "react-arborist";
-import { Directory, Memo } from "../types/Memo.types";
+import { Directory, Memo } from "../../../types/Memo.types";
 
 type Props = {
   node: NodeApi<Memo | Directory>;

@@ -1,5 +1,5 @@
 import { NodeApi, TreeApi } from "react-arborist";
-import { Directory, Memo } from "../types/Memo.types";
+import { Directory, Memo } from "../../../types/Memo.types";
 import { MdEdit } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 

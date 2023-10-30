@@ -1,5 +1,5 @@
 import { NodeRendererProps } from "react-arborist";
-import { Directory, Memo } from "../types/Memo.types";
+import { Directory, Memo } from "../../../types/Memo.types";
 import NodeToggleArrow from "./NodeToggleArrow";
 import NodeName from "./NodeName";
 import NodeIcon from "./NodeIcon";

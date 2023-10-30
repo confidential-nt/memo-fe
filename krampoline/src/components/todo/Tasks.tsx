@@ -1,4 +1,4 @@
-import { TodoItem } from "../pages/Todo";
+import { TodoItem } from "../../pages/Todo";
 import Task from "./Task";
 
 type Props = {

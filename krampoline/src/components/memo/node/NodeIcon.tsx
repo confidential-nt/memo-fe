@@ -1,5 +1,5 @@
 import { NodeApi } from "react-arborist";
-import { Directory, Memo } from "../types/Memo.types";
+import { Directory, Memo } from "../../../types/Memo.types";
 import { AiOutlineFolder } from "react-icons/ai";
 import { PiNotepadLight } from "react-icons/pi";
 
