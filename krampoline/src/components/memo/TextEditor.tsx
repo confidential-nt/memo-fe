@@ -4,18 +4,14 @@ import { useRef } from "react";
 
 export default function TextEditor() {
   const editorRef = useRef<TinyMCEEditor | null>(null);
-  // const log = () => {
-  //   if (editorRef.current) {
-  //     console.log(editorRef.current.getContent());
-  //   }
-  // };
+
   return (
     <Editor
       apiKey={import.meta.env.VITE_TINY_MCE_API_KEY}
       onInit={(_evt, editor) => (editorRef.current = editor)}
       initialValue=""
       init={{
-        height: 500,
+        height: 600,
         menubar: true,
         plugins: [
           "advlist",

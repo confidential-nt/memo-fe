@@ -5,7 +5,7 @@ import { LiaCalendarCheckSolid } from "react-icons/lia";
 export default function Navbar() {
   const { pathname } = useLocation();
   return (
-    <nav className="fixed left-0 bottom-0 w-full bg-main-mint border-t-2 border-black flex justify-between px-10 py-2">
+    <nav className="fixed left-0 bottom-0 w-full bg-main-mint border-t-2 border-black flex justify-between px-10 py-2 z-10 md:flex-col md:w-auto md:h-[calc(99%-94px)] md:px-2 md:py-20 md:rounded-md md:border-2">
       <Link to="/todo" className="flex flex-col items-center">
         <PiStackSimple className="text-3xl" />
         <span className={pathname === "/todo" ? "border-b border-black" : ""}>

@@ -5,13 +5,17 @@ import Node from "./node/Node";
 
 type Props = {
   memoStore: Directory;
+  className?: string;
 };
 
-export default function TreeView({ memoStore }: Props) {
+export default function TreeView({ memoStore, className }: Props) {
   return (
     <>
       {memoStore && (
-        <Tree data={(transformData(memoStore) as Directory).children}>
+        <Tree
+          data={(transformData(memoStore) as Directory).children}
+          className={`${className}`}
+        >
           {(props) => (
             <Node
               {...props}
