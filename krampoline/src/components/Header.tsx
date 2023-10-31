@@ -15,7 +15,7 @@ export default function Header() {
           className="w-full h-[2rem] block border-2 border-black rounded-[15px] shadow-standard mr-5 p-1"
           placeholder="ex)#todo 내일까지 과제하기 or #memo 사과는 맛있다."
         />
-        <button className="rounded-full bg-white w-[2.8rem] h-[2.5rem] flex justify-center items-center border-2 border-black shadow-standard">
+        <button className="rounded-full bg-white w-[2.8rem] h-[2.5rem] flex justify-center items-center border-2 border-black shadow-standard active:shadow-none active:translate-x-1 active:translate-y-1">
           <AiOutlinePlus className="text-3xl" />
         </button>
       </form>
