@@ -28,16 +28,24 @@ export default function Memo() {
   }, []);
 
   return (
-    <section>
-      <button onClick={toggleDrawer(!isDrawerOpened)}>toggle</button>
+    <section className="h-[calc(100%+105px)] overflow-hidden md:h-auto md:flex md:overflow-visible">
+      {/* <button onClick={toggleDrawer(!isDrawerOpened)} className="md:hidden">
+        toggle
+      </button> */}
       <Drawer
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         open={isDrawerOpened}
+        className="md:hidden"
       >
         <>{memoStore && <TreeView memoStore={memoStore} />}</>
       </Drawer>
-      <TextEditor />
+      <div className="md:grow">
+        <TextEditor />
+      </div>
+      {memoStore && (
+        <TreeView memoStore={memoStore} className="hidden md:block md:ml-1" />
+      )}
     </section>
   );
 }

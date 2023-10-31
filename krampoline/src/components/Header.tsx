@@ -8,7 +8,7 @@ export default function Header() {
   useEffect(() => {}, [pathname]);
 
   return (
-    <header className="bg-main-mint border-b-2 border-black px-4 pt-4 pb-1 fixed top-0 left-0 w-full">
+    <header className="bg-main-mint border-b-2 border-black px-4 pt-4 pb-1 fixed top-0 left-0 w-full z-10 md:px-80">
       <form className="flex items-center mb-2">
         <input
           type="text"
@@ -20,7 +20,7 @@ export default function Header() {
         </button>
       </form>
       <h1 className="text-center capitalize font-bold">
-        {pathname.substring(1)}
+        {pathname === "/" ? "Todo" : pathname.substring(1)}
       </h1>
     </header>
   );
