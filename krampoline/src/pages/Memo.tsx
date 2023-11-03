@@ -1,8 +1,6 @@
 import TextEditor from "../components/memo/TextEditor";
-import TreeView from "../components/memo/TreeView";
 import { useState } from "react";
 import { Directory, Memo as MemoType, onCreateArgs } from "../types/Memo.types";
-import Drawer from "../components/memo/drawer/Drawer";
 import { useUserContext } from "../context/UserContext";
 import {
   addMemoToDirectory,
@@ -12,6 +10,7 @@ import {
   getAllMemoStoreQuery,
 } from "../service/database/api";
 import { useLiveQuery } from "dexie-react-hooks";
+import TreeViewHOC from "../components/memo/TreeViewHOC";
 
 export default function Memo() {
   const [isDrawerOpened, setDrawerOpened] = useState(false);
@@ -76,37 +75,29 @@ export default function Memo() {
       {/* <button onClick={toggleDrawer(!isDrawerOpened)} className="md:hidden">
         toggle
       </button> */}
-      <Drawer
+      <TreeViewHOC
+        className="md:hidden"
+        onClickDirectory={onClickDirectory}
+        onClickMemo={onClickMemo}
+        onCreate={onCreate}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         open={isDrawerOpened}
-        className="md:hidden"
-      >
-        <>
-          {memoStore && (
-            <TreeView
-              memoStore={memoStore}
-              onCreate={onCreate}
-              onClickDirectory={onClickDirectory}
-              onClickMemo={onClickMemo}
-            />
-          )}
-        </>
-      </Drawer>
+        memoStore={memoStore as Directory}
+      />
       <div className="md:grow">
         <TextEditor />
       </div>
-      <>
-        {memoStore && (
-          <TreeView
-            memoStore={memoStore}
-            className="hidden md:block md:ml-1"
-            onCreate={onCreate}
-            onClickDirectory={onClickDirectory}
-            onClickMemo={onClickMemo}
-          />
-        )}
-      </>
+      <TreeViewHOC
+        className="hidden md:block md:ml-1"
+        onClickDirectory={onClickDirectory}
+        onClickMemo={onClickMemo}
+        onCreate={onCreate}
+        onClose={toggleDrawer(false)}
+        onOpen={toggleDrawer(true)}
+        open={isDrawerOpened}
+        memoStore={memoStore as Directory}
+      />
     </section>
   );
 }
