@@ -34,7 +34,7 @@ export default function Node({
       style={style}
       ref={dragHandle}
       onClick={handleClick}
-      className={`group cursor-pointer hover:bg-main-mint
+      className={`group cursor-pointer hover:bg-main-yellow rounded-sm
         ${node.state.isSelected ? `border font-bold border-black` : ""}`}
     >
       <div className="flex items-center justify-between">

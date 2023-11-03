@@ -10,6 +10,7 @@ import {
 import { transformData } from "../../utils/memo";
 import Node from "./node/Node";
 import { IdObj } from "react-arborist/dist/types/utils";
+import TreePannel from "./TreePannel";
 
 const treeClassname = "tree";
 
@@ -48,28 +49,31 @@ export default function TreeView({
   return (
     <>
       {memoStore && (
-        <Tree
-          data={(transformData(memoStore) as Directory).children}
-          onCreate={onCreate}
-          onDelete={onDelete}
-          onRename={onRename}
-          onMove={onMove}
-          className={`${treeClassname} ${className}`}
-          onClick={(e) => {
-            if ((e.target as HTMLElement).classList.contains(treeClassname)) {
-              onClickDirectory(null);
-            }
-          }}
-        >
-          {(props) => (
-            <Node
-              {...props}
-              node={props.node}
-              onClickMemo={onClickMemo}
-              onClickDirectory={onClickDirectory}
-            />
-          )}
-        </Tree>
+        <div>
+          <TreePannel onCreate={onCreate} />
+          <Tree
+            data={(transformData(memoStore) as Directory).children}
+            onCreate={onCreate}
+            onDelete={onDelete}
+            onRename={onRename}
+            onMove={onMove}
+            className={`${treeClassname} ${className}`}
+            onClick={(e) => {
+              if ((e.target as HTMLElement).classList.contains(treeClassname)) {
+                onClickDirectory(null);
+              }
+            }}
+          >
+            {(props) => (
+              <Node
+                {...props}
+                node={props.node}
+                onClickMemo={onClickMemo}
+                onClickDirectory={onClickDirectory}
+              />
+            )}
+          </Tree>
+        </div>
       )}
     </>
   );
