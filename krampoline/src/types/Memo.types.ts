@@ -36,3 +36,11 @@ export type onRenameArgs = {
   name: string;
   node: NodeApi<Memo | Directory>;
 };
+
+export type onMoveArgs = {
+  dragIds: string[];
+  dragNodes: NodeApi<Memo | Directory>[];
+  parentId: string | null;
+  parentNode: NodeApi<Memo | Directory> | null;
+  index: number;
+};

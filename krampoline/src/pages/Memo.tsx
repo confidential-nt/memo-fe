@@ -17,6 +17,8 @@ import {
   deleteDirectory,
   deleteMemo,
   getAllMemoStoreQuery,
+  moveDirectory,
+  moveMemo,
   renameDirectory,
   renameMemo,
 } from "../service/database/api";
@@ -91,14 +93,14 @@ export default function Memo() {
     }
   };
 
-  const onMove = ({
-    dragIds,
-    dragNodes,
-    parentId,
-    parentNode,
-    index,
-  }: onMoveArgs) => {
-    console.log(dragIds, dragNodes, parentId, parentNode, index);
+  const onMove = ({ dragIds, dragNodes, parentId }: onMoveArgs) => {
+    dragNodes.forEach((node, i) => {
+      if (node.data.type === "directory") {
+        moveDirectory(dragIds[i], parentId);
+      } else {
+        moveMemo(dragIds[i], parentId);
+      }
+    });
   };
 
   const onClickMemo = (memo: MemoType | null) => {
