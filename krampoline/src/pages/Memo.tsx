@@ -5,8 +5,10 @@ import { Directory, Memo as MemoType, onCreateArgs } from "../types/Memo.types";
 import Drawer from "../components/memo/drawer/Drawer";
 import { useUserContext } from "../context/UserContext";
 import {
+  addMemoToDirectory,
   addRootDirectory,
   addRootMemo,
+  addSubDirectory,
   getAllMemoStoreQuery,
 } from "../service/database/api";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -20,9 +22,10 @@ export default function Memo() {
 
   const { tempUserId } = useUserContext();
 
-  const memoStore = useLiveQuery(() => {
+  const memoStore = useLiveQuery(async () => {
     if (tempUserId) {
-      return getAllMemoStoreQuery(tempUserId);
+      const result = await getAllMemoStoreQuery(tempUserId);
+      return result;
     }
   }, [tempUserId]) as Directory | undefined;
 
@@ -42,11 +45,11 @@ export default function Memo() {
 
   const onCreate = ({ type }: onCreateArgs) => {
     if (directory && type === "internal") {
-      console.log(1);
+      addSubDirectory(directory);
     }
 
     if (directory && type === "leaf") {
-      console.log(2);
+      addMemoToDirectory(directory);
     }
 
     if (!directory && type === "internal") {
