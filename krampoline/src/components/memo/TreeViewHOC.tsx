@@ -1,7 +1,14 @@
 import React from "react";
 import Drawer from "./drawer/Drawer";
 import TreeView from "./TreeView";
-import { Directory, Memo, onCreateArgs } from "../../types/Memo.types";
+import {
+  Directory,
+  Memo,
+  onCreateArgs,
+  onDeleteArgs,
+  onMoveArgs,
+  onRenameArgs,
+} from "../../types/Memo.types";
 import { IdObj } from "react-arborist/dist/types/utils";
 
 type Props = {
@@ -18,6 +25,15 @@ type Props = {
     type,
     parentNode,
   }: onCreateArgs) => IdObj | Promise<IdObj | null> | null;
+  onDelete: ({ ids, nodes }: onDeleteArgs) => void;
+  onRename: ({ id, name, node }: onRenameArgs) => void;
+  onMove: ({
+    dragIds,
+    dragNodes,
+    parentId,
+    parentNode,
+    index,
+  }: onMoveArgs) => void;
 };
 
 export default function TreeViewHOC({
@@ -27,6 +43,9 @@ export default function TreeViewHOC({
   open,
   memoStore,
   onCreate,
+  onDelete,
+  onRename,
+  onMove,
   onClickDirectory,
   onClickMemo,
 }: Props) {
@@ -45,6 +64,9 @@ export default function TreeViewHOC({
         <TreeView
           memoStore={memoStore}
           onCreate={onCreate}
+          onDelete={onDelete}
+          onRename={onRename}
+          onMove={onMove}
           onClickDirectory={onClickDirectory}
           onClickMemo={onClickMemo}
         />
@@ -58,6 +80,9 @@ export default function TreeViewHOC({
         memoStore={memoStore}
         className={className}
         onCreate={onCreate}
+        onDelete={onDelete}
+        onRename={onRename}
+        onMove={onMove}
         onClickDirectory={onClickDirectory}
         onClickMemo={onClickMemo}
       />

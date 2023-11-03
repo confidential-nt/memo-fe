@@ -66,6 +66,24 @@ export async function addMemoToDirectory(directoryId: string) {
   }
 }
 
+export async function deleteDirectory(directoryId: string) {
+  await db.directories.delete(directoryId);
+}
+export async function deleteMemo(memoId: string) {
+  await db.memos.delete(memoId);
+}
+
+export async function renameDirectory(name: string, directoryId: string) {
+  await db.directories.update(directoryId, {
+    name,
+  });
+}
+export async function renameMemo(name: string, memoId: string) {
+  await db.memos.update(memoId, {
+    title: name,
+  });
+}
+
 async function fetchAllFromDirectory(
   directoryId: string
 ): Promise<Directory | undefined> {

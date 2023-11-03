@@ -1,13 +1,24 @@
 import TextEditor from "../components/memo/TextEditor";
 import { useState } from "react";
-import { Directory, Memo as MemoType, onCreateArgs } from "../types/Memo.types";
+import {
+  Directory,
+  Memo as MemoType,
+  onCreateArgs,
+  onDeleteArgs,
+  onRenameArgs,
+  onMoveArgs,
+} from "../types/Memo.types";
 import { useUserContext } from "../context/UserContext";
 import {
   addMemoToDirectory,
   addRootDirectory,
   addRootMemo,
   addSubDirectory,
+  deleteDirectory,
+  deleteMemo,
   getAllMemoStoreQuery,
+  renameDirectory,
+  renameMemo,
 } from "../service/database/api";
 import { useLiveQuery } from "dexie-react-hooks";
 import TreeViewHOC from "../components/memo/TreeViewHOC";
@@ -62,6 +73,34 @@ export default function Memo() {
     return null;
   };
 
+  const onDelete = ({ ids, nodes }: onDeleteArgs) => {
+    nodes.forEach((node, i) => {
+      if (node.data.type === "directory") {
+        deleteDirectory(ids[i]);
+      } else {
+        deleteMemo(ids[i]);
+      }
+    });
+  };
+
+  const onRename = ({ id, name, node }: onRenameArgs) => {
+    if (node.data.type === "directory") {
+      renameDirectory(name, id);
+    } else {
+      renameMemo(name, id);
+    }
+  };
+
+  const onMove = ({
+    dragIds,
+    dragNodes,
+    parentId,
+    parentNode,
+    index,
+  }: onMoveArgs) => {
+    console.log(dragIds, dragNodes, parentId, parentNode, index);
+  };
+
   const onClickMemo = (memo: MemoType | null) => {
     setMemo(memo);
   };
@@ -72,14 +111,17 @@ export default function Memo() {
 
   return (
     <section className="h-[calc(100%+105px)] overflow-hidden md:h-auto md:flex md:overflow-visible">
-      {/* <button onClick={toggleDrawer(!isDrawerOpened)} className="md:hidden">
+      <button onClick={toggleDrawer(!isDrawerOpened)} className="md:hidden">
         toggle
-      </button> */}
+      </button>
       <TreeViewHOC
         className="md:hidden"
         onClickDirectory={onClickDirectory}
         onClickMemo={onClickMemo}
         onCreate={onCreate}
+        onDelete={onDelete}
+        onRename={onRename}
+        onMove={onMove}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         open={isDrawerOpened}
@@ -93,6 +135,9 @@ export default function Memo() {
         onClickDirectory={onClickDirectory}
         onClickMemo={onClickMemo}
         onCreate={onCreate}
+        onDelete={onDelete}
+        onRename={onRename}
+        onMove={onMove}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         open={isDrawerOpened}
