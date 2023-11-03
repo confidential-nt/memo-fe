@@ -1,18 +1,20 @@
 export interface MemoStore {
-  id?: string;
-  directories: Directory[];
-  memos: Memo[];
+  id: string;
 }
 
 export interface Directory {
-  id?: string;
+  id: string;
   name: string;
-  directories: Directory[];
-  memos: Memo[];
+  parentId?: string;
+  memoStoreId: string;
+  directories?: Directory[];
+  memos?: Memo[];
 }
 
 export interface Memo {
-  id?: string;
+  id: string;
   title: string;
   content: string;
+  directoryId?: string;
+  memoStoreId: string;
 }

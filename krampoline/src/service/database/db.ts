@@ -10,9 +10,9 @@ class MyAppDatabase extends Dexie {
     super("MyAppDatabase");
 
     this.version(1).stores({
-      memoStores: "++id, directories, memos",
-      directories: "++id, &name, directories, memos", // Assuming directory names are unique, adjust if necessary
-      memos: "++id, title, content",
+      memoStores: "++id",
+      directories: "++id, name, *parentId, memoStoreId",
+      memos: "++id, title, content, directoryId, memoStoreId",
     });
 
     this.memoStores = this.table("memoStores");
