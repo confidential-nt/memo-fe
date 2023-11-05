@@ -18,24 +18,30 @@ import {
   onRenameArgs,
 } from "../types/Memo.types";
 
+type ActionType = "internal" | "leaf";
+
+type ActionMap = {
+  [key: string]:
+    | ((parentDirectoryId: string) => Promise<void>)
+    | ((userId: string) => "" | Promise<void> | undefined);
+};
+
 export default function useMemoActions(directory: string | null) {
   const { tempUserId } = useUserContext();
 
   const onCreate = ({ type }: onCreateArgs) => {
-    if (directory && type === "internal") {
-      addSubDirectory(directory);
-    }
+    const actionMap: ActionMap = {
+      internal: directory
+        ? addSubDirectory
+        : (userId: string) => addRootDirectory(userId),
+      leaf: directory
+        ? addMemoToDirectory
+        : (userId: string) => addRootMemo(userId),
+    };
 
-    if (directory && type === "leaf") {
-      addMemoToDirectory(directory);
-    }
-
-    if (!directory && type === "internal") {
-      tempUserId && addRootDirectory(tempUserId);
-    }
-
-    if (!directory && type === "leaf") {
-      tempUserId && addRootMemo(tempUserId);
+    if (type in actionMap) {
+      const action = actionMap[type as ActionType];
+      directory ? action(directory) : tempUserId ? action(tempUserId) : null;
     }
 
     return null;
