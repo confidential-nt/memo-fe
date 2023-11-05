@@ -1,11 +1,12 @@
-import TextEditor from "../components/memo/TextEditor";
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import { Directory, Memo as MemoType } from "../types/Memo.types";
 import { useUserContext } from "../context/UserContext";
 import { getAllMemoStoreQuery } from "../service/database/api";
 import { useLiveQuery } from "dexie-react-hooks";
 import TreeViewHOC from "../components/memo/TreeViewHOC";
 import useMemoActions from "../hooks/useMemoActions";
+
+const TextEditor = lazy(() => import("../components/memo/TextEditor"));
 
 export default function Memo() {
   const [isDrawerOpened, setDrawerOpened] = useState(false);
@@ -65,7 +66,9 @@ export default function Memo() {
         memoStore={memoStore as Directory}
       />
       <div className="md:grow">
-        <TextEditor memo={memo} />
+        <Suspense fallback={<p>loading...</p>}>
+          <TextEditor memo={memo} />
+        </Suspense>
       </div>
       <TreeViewHOC
         className="hidden md:block md:ml-1"
