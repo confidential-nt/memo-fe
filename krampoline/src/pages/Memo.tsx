@@ -65,7 +65,7 @@ export default function Memo() {
         memoStore={memoStore as Directory}
       />
       <div className="md:grow">
-        <TextEditor />
+        <TextEditor memo={memo} />
       </div>
       <TreeViewHOC
         className="hidden md:block md:ml-1"

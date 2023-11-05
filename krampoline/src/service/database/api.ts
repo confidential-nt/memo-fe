@@ -16,7 +16,7 @@ export async function initMemoStore(userId: string) {
 export async function addRootDirectory(userId: string) {
   const directory: Directory = {
     id: uuid(),
-    name: "",
+    name: "새 폴더",
     memoStoreId: userId,
     parentId: undefined,
   };
@@ -41,7 +41,7 @@ export async function addSubDirectory(parentDirectoryId: string) {
   if (parentDirectory) {
     const directory: Directory = {
       id: uuid(),
-      name: "",
+      name: "새 폴더",
       parentId: parentDirectoryId,
       memoStoreId: parentDirectory.memoStoreId,
     };
@@ -96,6 +96,12 @@ export async function moveDirectory(
 export async function moveMemo(memoId: string, directoryId?: string | null) {
   await db.memos.update(memoId, {
     directoryId,
+  });
+}
+
+export async function saveMemoContent(memoId: string, content: string) {
+  await db.memos.update(memoId, {
+    content,
   });
 }
 
