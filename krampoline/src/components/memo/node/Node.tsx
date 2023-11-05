@@ -6,7 +6,7 @@ import NodeIcon from "./NodeIcon";
 import NodeActions from "./NodeActions";
 
 type AdditionalNodeProps = {
-  onClickFile: (file: Memo | null) => void;
+  onClickMemo: (memo: Memo | null) => void;
   onClickDirectory: (id: string | null) => void;
 };
 
@@ -15,13 +15,13 @@ export default function Node({
   style,
   tree,
   dragHandle,
-  onClickFile,
+  onClickMemo,
   onClickDirectory,
 }: NodeRendererProps<Memo | Directory> & AdditionalNodeProps) {
   const handleClick = () => {
     node.data.type === "directory" && node.toggle();
     if (node.data.type === "memo") {
-      onClickFile(node.data as Memo);
+      onClickMemo(node.data as Memo);
       onClickDirectory(null);
     }
     if (node.data.type === "directory") {
@@ -34,7 +34,7 @@ export default function Node({
       style={style}
       ref={dragHandle}
       onClick={handleClick}
-      className={`group cursor-pointer hover:bg-main-mint
+      className={`group cursor-pointer hover:bg-main-yellow rounded-sm
         ${node.state.isSelected ? `border font-bold border-black` : ""}`}
     >
       <div className="flex items-center justify-between">

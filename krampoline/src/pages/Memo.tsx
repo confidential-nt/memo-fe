@@ -1,13 +1,29 @@
-import TextEditor from "../components/memo/TextEditor";
-import TreeView from "../components/memo/TreeView";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Directory } from "../types/Memo.types";
-import Drawer from "../components/memo/drawer/Drawer";
+import { Suspense, lazy, useState } from "react";
+import { Directory, Memo as MemoType } from "../types/Memo.types";
+import { useUserContext } from "../context/UserContext";
+import { getAllMemoStoreQuery } from "../service/database/api";
+import { useLiveQuery } from "dexie-react-hooks";
+import TreeViewHOC from "../components/memo/TreeViewHOC";
+import useMemoActions from "../hooks/useMemoActions";
+
+const TextEditor = lazy(() => import("../components/memo/TextEditor"));
 
 export default function Memo() {
   const [isDrawerOpened, setDrawerOpened] = useState(false);
-  const [memoStore, setMemoStore] = useState<Directory>();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [memo, setMemo] = useState<MemoType | null>(null);
+  const [directory, setDirectory] = useState<string | null>(null);
+
+  const { tempUserId } = useUserContext();
+  const { onCreate, onDelete, onMove, onRename } = useMemoActions(directory);
+
+  const memoStore = useLiveQuery(async () => {
+    if (tempUserId) {
+      const result = await getAllMemoStoreQuery(tempUserId);
+      return result;
+    }
+  }, [tempUserId]) as Directory | undefined;
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -23,29 +39,50 @@ export default function Memo() {
       setDrawerOpened(open);
     };
 
-  useEffect(() => {
-    axios.get("/data/memo.json").then((res) => setMemoStore(res.data));
-  }, []);
+  const onClickMemo = (memo: MemoType | null) => {
+    setMemo(memo);
+  };
+
+  const onClickDirectory = (id: string | null) => {
+    setDirectory(id);
+  };
 
   return (
     <section className="h-[calc(100%+105px)] overflow-hidden md:h-auto md:flex md:overflow-visible">
-      {/* <button onClick={toggleDrawer(!isDrawerOpened)} className="md:hidden">
+      <button onClick={toggleDrawer(!isDrawerOpened)} className="md:hidden">
         toggle
-      </button> */}
-      <Drawer
+      </button>
+      <TreeViewHOC
+        className="md:hidden"
+        onClickDirectory={onClickDirectory}
+        onClickMemo={onClickMemo}
+        onCreate={onCreate}
+        onDelete={onDelete}
+        onRename={onRename}
+        onMove={onMove}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         open={isDrawerOpened}
-        className="md:hidden"
-      >
-        <>{memoStore && <TreeView memoStore={memoStore} />}</>
-      </Drawer>
+        memoStore={memoStore as Directory}
+      />
       <div className="md:grow">
-        <TextEditor />
+        <Suspense fallback={<p>loading...</p>}>
+          <TextEditor memo={memo} />
+        </Suspense>
       </div>
-      {memoStore && (
-        <TreeView memoStore={memoStore} className="hidden md:block md:ml-1" />
-      )}
+      <TreeViewHOC
+        className="hidden md:block md:ml-1"
+        onClickDirectory={onClickDirectory}
+        onClickMemo={onClickMemo}
+        onCreate={onCreate}
+        onDelete={onDelete}
+        onRename={onRename}
+        onMove={onMove}
+        onClose={toggleDrawer(false)}
+        onOpen={toggleDrawer(true)}
+        open={isDrawerOpened}
+        memoStore={memoStore as Directory}
+      />
     </section>
   );
 }
