@@ -1,29 +1,11 @@
 import TextEditor from "../components/memo/TextEditor";
 import { useState } from "react";
-import {
-  Directory,
-  Memo as MemoType,
-  onCreateArgs,
-  onDeleteArgs,
-  onRenameArgs,
-  onMoveArgs,
-} from "../types/Memo.types";
+import { Directory, Memo as MemoType } from "../types/Memo.types";
 import { useUserContext } from "../context/UserContext";
-import {
-  addMemoToDirectory,
-  addRootDirectory,
-  addRootMemo,
-  addSubDirectory,
-  deleteDirectory,
-  deleteMemo,
-  getAllMemoStoreQuery,
-  moveDirectory,
-  moveMemo,
-  renameDirectory,
-  renameMemo,
-} from "../service/database/api";
+import { getAllMemoStoreQuery } from "../service/database/api";
 import { useLiveQuery } from "dexie-react-hooks";
 import TreeViewHOC from "../components/memo/TreeViewHOC";
+import useMemoActions from "../hooks/useMemoActions";
 
 export default function Memo() {
   const [isDrawerOpened, setDrawerOpened] = useState(false);
@@ -33,6 +15,7 @@ export default function Memo() {
   const [directory, setDirectory] = useState<string | null>(null);
 
   const { tempUserId } = useUserContext();
+  const { onCreate, onDelete, onMove, onRename } = useMemoActions(directory);
 
   const memoStore = useLiveQuery(async () => {
     if (tempUserId) {
@@ -54,54 +37,6 @@ export default function Memo() {
 
       setDrawerOpened(open);
     };
-
-  const onCreate = ({ type }: onCreateArgs) => {
-    if (directory && type === "internal") {
-      addSubDirectory(directory);
-    }
-
-    if (directory && type === "leaf") {
-      addMemoToDirectory(directory);
-    }
-
-    if (!directory && type === "internal") {
-      tempUserId && addRootDirectory(tempUserId);
-    }
-
-    if (!directory && type === "leaf") {
-      tempUserId && addRootMemo(tempUserId);
-    }
-
-    return null;
-  };
-
-  const onDelete = ({ ids, nodes }: onDeleteArgs) => {
-    nodes.forEach((node, i) => {
-      if (node.data.type === "directory") {
-        deleteDirectory(ids[i]);
-      } else {
-        deleteMemo(ids[i]);
-      }
-    });
-  };
-
-  const onRename = ({ id, name, node }: onRenameArgs) => {
-    if (node.data.type === "directory") {
-      renameDirectory(name, id);
-    } else {
-      renameMemo(name, id);
-    }
-  };
-
-  const onMove = ({ dragIds, dragNodes, parentId }: onMoveArgs) => {
-    dragNodes.forEach((node, i) => {
-      if (node.data.type === "directory") {
-        moveDirectory(dragIds[i], parentId);
-      } else {
-        moveMemo(dragIds[i], parentId);
-      }
-    });
-  };
 
   const onClickMemo = (memo: MemoType | null) => {
     setMemo(memo);
