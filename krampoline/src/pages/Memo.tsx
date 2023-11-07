@@ -48,10 +48,10 @@ export default function Memo() {
   };
 
   return (
-    <section className="h-[calc(100%+105px)] overflow-hidden md:h-auto md:flex md:overflow-visible">
-      <button onClick={toggleDrawer(!isDrawerOpened)} className="md:hidden">
+    <section className="h-screen pt-3 md:pt-2 md:h-auto md:flex">
+      {/* <button onClick={toggleDrawer(!isDrawerOpened)} className="md:hidden">
         toggle
-      </button>
+      </button> */}
       <TreeViewHOC
         className="md:hidden"
         onClickDirectory={onClickDirectory}
@@ -71,7 +71,7 @@ export default function Memo() {
         </Suspense>
       </div>
       <TreeViewHOC
-        className="hidden md:block md:ml-1"
+        className="hidden md:block md:ml-3"
         onClickDirectory={onClickDirectory}
         onClickMemo={onClickMemo}
         onCreate={onCreate}

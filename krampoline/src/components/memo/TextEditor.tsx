@@ -39,7 +39,7 @@ export default function TextEditor({ memo }: Props) {
         onEditorChange={handleChange}
         initialValue={memo ? memo.content : ""}
         init={{
-          height: 600,
+          height: "85vh",
           menubar: true,
           plugins: [
             "advlist",

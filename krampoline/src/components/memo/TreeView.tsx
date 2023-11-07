@@ -49,7 +49,7 @@ export default function TreeView({
   return (
     <>
       {memoStore && (
-        <div>
+        <div className={className}>
           <TreePannel onCreate={onCreate} />
           <Tree
             data={(transformData(memoStore) as Directory).children}
@@ -57,7 +57,7 @@ export default function TreeView({
             onDelete={onDelete}
             onRename={onRename}
             onMove={onMove}
-            className={`${treeClassname} ${className}`}
+            className={`${treeClassname}`}
             onClick={(e) => {
               if ((e.target as HTMLElement).classList.contains(treeClassname)) {
                 onClickDirectory(null);
