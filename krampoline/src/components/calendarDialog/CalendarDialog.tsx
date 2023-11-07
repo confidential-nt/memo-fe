@@ -115,12 +115,13 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
                     <div className="flex flex-col md:flex-row">
                         <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-3 mt-8">날짜</h1>
                         <p className="flex justify-between items-center sm:w-50 md:w-[23rem] lg:w-[23rem] xl:w-[23rem] h-12 border-black border-2 rounded-[15px] shadow-standard bg-white my-4 pl-3 ml-2 mt-6">
-                            {selectedRange?.start?.toLocaleDateString()} ~ {selectedRange?.end?.toLocaleDateString()}
+                            {selectedRange?.start?.toLocaleDateString()} ~ {selectedRange?.end?.toLocaleDateString() ? new Date(selectedRange.end.getTime() - 24 * 60 * 60 * 1000).toLocaleDateString() : ''}
                         </p>
+
 
                     </div>
                     <div className="flex flex-col md:flex-row">
-                    <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-5 mt-4">시작 시간</h1>
+                        <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-5 mt-4">시작 시간</h1>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <MobileTimePicker
                                 defaultValue={dayjs('2022-04-17T15:30')}
@@ -128,8 +129,8 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
                         </LocalizationProvider>
                     </div>
                     <div className="flex flex-col md:flex-row">
-                    <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-5 mt-4">마감 시간</h1>
-                        <LocalizationProvider 
+                        <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-5 mt-4">마감 시간</h1>
+                        <LocalizationProvider
                             dateAdapter={AdapterDayjs}
                         >
                             <MobileTimePicker
