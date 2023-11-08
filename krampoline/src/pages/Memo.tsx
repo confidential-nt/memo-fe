@@ -11,7 +11,6 @@ const TextEditor = lazy(() => import("../components/memo/TextEditor"));
 export default function Memo() {
   const [isDrawerOpened, setDrawerOpened] = useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [memo, setMemo] = useState<MemoType | null>(null);
   const [directory, setDirectory] = useState<string | null>(null);
 
@@ -63,7 +62,7 @@ export default function Memo() {
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         open={isDrawerOpened}
-        memoStore={memoStore as Directory}
+        memoStore={memoStore}
       />
       <div className="md:grow">
         <Suspense fallback={<p>loading...</p>}>
@@ -81,7 +80,7 @@ export default function Memo() {
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         open={isDrawerOpened}
-        memoStore={memoStore as Directory}
+        memoStore={memoStore}
       />
     </section>
   );

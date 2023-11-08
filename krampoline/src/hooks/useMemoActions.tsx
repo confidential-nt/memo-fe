@@ -21,7 +21,7 @@ import {
 type ActionType = "internal" | "leaf";
 
 type ActionMap = {
-  [key: string]:
+  [key in ActionType]:
     | ((parentDirectoryId: string) => Promise<void>)
     | ((userId: string) => "" | Promise<void> | undefined);
 };

@@ -1,9 +1,41 @@
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as TinyMCEEditor } from "tinymce";
 import { useCallback, useRef, useState } from "react";
-import _ from "lodash";
+import debounce from "lodash.debounce";
 import { Memo } from "../../types/Memo.types";
 import { saveMemoContent } from "../../service/database/api";
+
+const editorInitConfig = {
+  height: "85vh",
+  menubar: true,
+  plugins: [
+    "advlist",
+    "autolink",
+    "lists",
+    "link",
+    "image",
+    "charmap",
+    "preview",
+    "anchor",
+    "searchreplace",
+    "visualblocks",
+    "code",
+    "fullscreen",
+    "insertdatetime",
+    "media",
+    "table",
+    "code",
+    "help",
+    "wordcount",
+  ],
+  toolbar:
+    "undo redo | blocks | " +
+    "bold italic forecolor | alignleft aligncenter " +
+    "alignright alignjustify | bullist numlist outdent indent | " +
+    "removeformat | help",
+  content_style:
+    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+};
 
 type Props = {
   memo: Memo | null;
@@ -15,10 +47,9 @@ export default function TextEditor({ memo }: Props) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSave = useCallback(
-    _.debounce((value: string, memo: Memo) => {
-      saveMemoContent(memo.id, value).then(() => {
-        setDirty(false);
-      });
+    debounce(async (value: string, memo: Memo) => {
+      await saveMemoContent(memo.id, value);
+      setDirty(false);
     }, 1000),
     []
   );
@@ -38,37 +69,7 @@ export default function TextEditor({ memo }: Props) {
         onInit={(_evt, editor) => (editorRef.current = editor)}
         onEditorChange={handleChange}
         initialValue={memo ? memo.content : ""}
-        init={{
-          height: "85vh",
-          menubar: true,
-          plugins: [
-            "advlist",
-            "autolink",
-            "lists",
-            "link",
-            "image",
-            "charmap",
-            "preview",
-            "anchor",
-            "searchreplace",
-            "visualblocks",
-            "code",
-            "fullscreen",
-            "insertdatetime",
-            "media",
-            "table",
-            "code",
-            "help",
-            "wordcount",
-          ],
-          toolbar:
-            "undo redo | blocks | " +
-            "bold italic forecolor | alignleft aligncenter " +
-            "alignright alignjustify | bullist numlist outdent indent | " +
-            "removeformat | help",
-          content_style:
-            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-        }}
+        init={editorInitConfig}
       />
     </>
   );

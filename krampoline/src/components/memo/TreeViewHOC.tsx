@@ -16,7 +16,7 @@ type Props = {
   onClose?: (event: React.KeyboardEvent | React.MouseEvent) => void;
   onOpen?: (event: React.KeyboardEvent | React.MouseEvent) => void;
   open?: boolean;
-  memoStore: Directory;
+  memoStore?: Directory;
   onClickMemo: (memo: Memo | null) => void;
   onClickDirectory: (id: string | null) => void;
   onCreate: ({
@@ -51,9 +51,7 @@ export default function TreeViewHOC({
 }: Props) {
   if (!memoStore) return null;
 
-  const target = className.split(" ");
-
-  if (target.includes("md:hidden") && onClose && onOpen && open) {
+  if (className.includes("md:hidden") && onClose && onOpen && open) {
     return (
       <Drawer
         onClose={onClose}
@@ -74,7 +72,7 @@ export default function TreeViewHOC({
     );
   }
 
-  if (target.includes("md:block")) {
+  if (className.includes("md:block")) {
     return (
       <TreeView
         memoStore={memoStore}
