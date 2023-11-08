@@ -5,6 +5,7 @@ import { getAllMemoStoreQuery } from "../service/database/api";
 import { useLiveQuery } from "dexie-react-hooks";
 import TreeViewHOC from "../components/memo/TreeViewHOC";
 import useMemoActions from "../hooks/useMemoActions";
+import { LuFolderTree } from "react-icons/lu";
 
 const TextEditor = lazy(() => import("../components/memo/TextEditor"));
 
@@ -48,9 +49,12 @@ export default function Memo() {
 
   return (
     <section className="h-screen pt-3 md:pt-2 md:h-auto md:flex">
-      {/* <button onClick={toggleDrawer(!isDrawerOpened)} className="md:hidden">
-        toggle
-      </button> */}
+      <button
+        onClick={toggleDrawer(!isDrawerOpened)}
+        className="fixed z-20 bottom-28 left-5 md:hidden bg-violet-700 p-2 rounded-full"
+      >
+        <LuFolderTree className="text-white" />
+      </button>
       <TreeViewHOC
         className="md:hidden"
         onClickDirectory={onClickDirectory}
