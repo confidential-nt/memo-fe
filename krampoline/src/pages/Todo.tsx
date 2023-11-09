@@ -27,7 +27,7 @@ function Todo() {
   };
 
   return (
-    <div className="pb-16">
+    <div className="pb-16 sm:px-6 md:px-8">
       <div className="flex flex-col m-4">
         <label className="w-32 h-10 shrink-0 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2">
           오늘 할 일
