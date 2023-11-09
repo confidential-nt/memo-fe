@@ -27,14 +27,14 @@ function Todo() {
   };
 
   return (
-    <div className="pb-16 sm:px-6 md:px-8">
-      <div className="flex flex-col m-4">
+    <div className="pb-16 md:flex flex-row justify-between mx-4">
+      <div className="flex flex-col m-4 md:w-1/2 mr-6">
         <label className="w-32 h-10 shrink-0 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2">
           오늘 할 일
         </label>
         <Tasks todos={todos} onDelete={handleDelete} onUpdate={handleUpdate} />
       </div>
-      <div className="flex flex-col m-4">
+      <div className="flex flex-col m-4 md:w-1/2 ml-6">
         <label className="w-32 h-10 shrink-0 bg-amber-500 border-black border-2 rounded-full flex items-center font-bold justify-center my-2">
           진행 중 할 일
         </label>
