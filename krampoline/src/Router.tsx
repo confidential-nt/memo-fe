@@ -8,8 +8,8 @@ export default function Router() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route path="/" element={<Navigate to="/todo" replace />} />
-        <Route path="/todo" index element={<Todo />} />
+        <Route path="/" element={<Navigate to="/today" replace />} />
+        <Route path="/today" index element={<Todo />} />
         <Route path="/calendar" element={<MyCalendar />} />
         <Route path="/memo" element={<Memo />} />
       </Route>
