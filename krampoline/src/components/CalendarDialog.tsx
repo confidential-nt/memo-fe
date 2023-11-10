@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -15,13 +16,14 @@ import {
     ThemeProvider,
     createTheme
 } from '@mui/material';
+import React from 'react';
 
 type Event = {
     id: number;
-    content: string;
+    title: string;
     status: string;
-    startDate: Date;
-    endDate: Date;
+    start: Date;
+    end: Date;
 };
 
 type CalendarDialogProps = {
@@ -36,7 +38,7 @@ type CalendarDialogProps = {
         isDialogOpen: boolean;
         setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
         events: Event[];
-        setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
+        setNewEvent: React.Dispatch<React.SetStateAction<Event | null>>;
     };
 };
 
@@ -47,11 +49,11 @@ const theme = createTheme({
                 root: {
                     '& .MuiInputBase-input': {
                         display: 'flex',
-                        height: '2rem', // 12 / 4 = 3 (1rem = 4px)
+                        height: '2rem',
                         border: '2px solid #000',
                         borderRadius: '15px',
                         boxShadow: '4px 4px 0 0',
-                        marginTop: '0.8rem', // 4 / 4 = 1 (1rem = 4px)
+                        marginTop: '0.8rem',
                         paddingRight: '10rem',
                         paddingLeft: '0.8rem'
                     },
@@ -71,28 +73,43 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
         isDialogOpen,
         setIsDialogOpen,
         events,
-        setEvents,
+        setNewEvent
     } = value;
+
+    const [startTime, setStartTime] = useState<Date | null>(dayjs().toDate());
+    const [endTime, setEndTime] = useState<Date | null>(dayjs().add(1, 'hour').toDate());
 
     const handleCloseDialog = () => {
         setIsDialogOpen(false);
     };
 
     const handleEventSave = () => {
-        if (eventTitle && selectedRange) {
+        if (eventTitle && selectedRange && startTime && endTime) {
+            const startWithTime = dayjs(selectedRange.start)
+                .hour(dayjs(startTime).hour())
+                .minute(dayjs(startTime).minute())
+                .toDate();
+
+            const endWithTime = dayjs(selectedRange.end)
+                .hour(dayjs(endTime).hour())
+                .minute(dayjs(endTime).minute())
+                .toDate();
+
             const event: Event = {
                 id: events.length + 1,
-                content: eventTitle,
+                title: eventTitle,
                 status: '진행중',
-                startDate: selectedRange.start,
-                endDate: selectedRange.end,
+                start: startWithTime,
+                end: endWithTime,
             };
-            setEvents([...events, event]);
+
+            setNewEvent(event);
             setEventTitle('');
             setSelectedRange(null);
             handleCloseDialog();
         }
     };
+
 
     return (
         <Dialog open={isDialogOpen} TransitionComponent={Slide} onClose={handleCloseDialog} className="w-200 h-300">
@@ -117,14 +134,17 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
                         <p className="flex justify-between items-center sm:w-50 md:w-[23rem] lg:w-[23rem] xl:w-[23rem] h-12 border-black border-2 rounded-[15px] shadow-standard bg-white my-4 pl-3 ml-2 mt-6">
                             {selectedRange?.start?.toLocaleDateString()} ~ {selectedRange?.end?.toLocaleDateString() ? new Date(selectedRange.end.getTime() - 24 * 60 * 60 * 1000).toLocaleDateString() : ''}
                         </p>
-
-
                     </div>
                     <div className="flex flex-col md:flex-row">
                         <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-5 mt-4">시작 시간</h1>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <MobileTimePicker
-                                defaultValue={dayjs('2022-04-17T15:30')}
+                                value={dayjs(startTime)}
+                                onChange={(newStartTime) => {
+                                    if (newStartTime) {
+                                        setStartTime(newStartTime.toDate());
+                                    }
+                                }}
                             />
                         </LocalizationProvider>
                     </div>
@@ -134,8 +154,14 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
                             dateAdapter={AdapterDayjs}
                         >
                             <MobileTimePicker
-                                defaultValue={dayjs('2022-04-17T15:30')}
+                                value={dayjs(endTime)}
+                                onChange={(newEndTime) => {
+                                    if (newEndTime) {
+                                        setEndTime(newEndTime.toDate());
+                                    }
+                                }}
                             />
+
                         </LocalizationProvider>
                     </div>
                 </DialogContentText>
