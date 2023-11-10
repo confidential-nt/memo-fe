@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Calendar, luxonLocalizer } from 'react-big-calendar';
 import { DateTime } from 'luxon';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import CalendarDialog from '../components/calendarDialog/CalendarDialog';
+import CalendarDialog from '../components/CalendarDialog';
 
 const localizer = luxonLocalizer(DateTime);
 
