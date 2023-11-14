@@ -1,14 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Calendar, luxonLocalizer } from 'react-big-calendar';
 import { DateTime } from 'luxon';
+import dayjs from 'dayjs';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import CalendarDialog from '../components/CalendarDialog';
+import CalendarDialog from '../components/calendar/CalendarDialog';
+// import EditDialog from '../components/calendar/EditDialog';
 
 const localizer = luxonLocalizer(DateTime);
 
 function readTodosFromLocalStorage() {
   const eventsDataString = localStorage.getItem("eventsData");
+  if (!eventsDataString) {
+    return [];
+  }
+
   const eventsData = eventsDataString ? JSON.parse(eventsDataString) : [];
+  if (!Array.isArray(eventsData)) {
+    return [];
+  }
 
   const modifiedEventsData: Event[] = eventsData.map((data: Event) => ({
     ...data,
@@ -31,8 +40,12 @@ const MyCalendar = () => {
   const [events, setEvents] = useState<Event[]>(() => readTodosFromLocalStorage());
   const [newEvent, setNewEvent] = useState<Event | null>(null);
   const [eventTitle, setEventTitle] = useState('');
-  const [selectedRange, setSelectedRange] = useState<{ start: Date; end: Date } | null>(null);
+  const [selectedRange, setSelectedRange] = useState<{ slots: Date[] } | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [startTime, setStartTime] = useState<Date | null>(dayjs().toDate());
+  const [endTime, setEndTime] = useState<Date | null>(dayjs().add(1, 'hour').toDate());
+  // const [openEditDialog, setOpenEditDialog] = useState(false);
 
   useEffect(() => {
     if (newEvent) {
@@ -49,10 +62,31 @@ const MyCalendar = () => {
     setIsDialogOpen(true);
   };
 
-  const handleSelectSlot = ({ start, end }: { start: Date; end: Date }) => {
-    setSelectedRange({ start, end });
+  const handleSelectSlot = ({ slots }: { slots: Date[] }) => {
+    setSelectedRange({ slots });
     handleOpenDialog();
   };
+
+  const handleOnClick = (event: Event) => {
+    setSelectedEvent(event);
+    setEventTitle(event.title);
+
+    const startDate = new Date(event.start);
+    const endDate = new Date(event.end);
+    const isSameDate = startDate.toDateString() === endDate.toDateString();
+    const dateArray = isSameDate ? [startDate] : [startDate, endDate];
+
+    setSelectedRange({ slots: dateArray });
+
+    setStartTime(startDate);
+    setEndTime(endDate);
+
+    // setOpenEditDialog(true);
+  }
+
+  // const handleCloseEditDialog = () => {
+  //   setOpenEditDialog(false);
+  // };
 
   return (
     <div className="h-[30rem]">
@@ -71,6 +105,7 @@ const MyCalendar = () => {
             }}
             selectable
             onSelectSlot={handleSelectSlot}
+            onSelectEvent={handleOnClick}
             popup
           />
           <CalendarDialog value={{
@@ -81,8 +116,31 @@ const MyCalendar = () => {
             isDialogOpen,
             setIsDialogOpen,
             events,
-            setNewEvent
+            setEvents,
+            setNewEvent,
+            selectedEvent,
+            startTime,
+            setStartTime,
+            endTime,
+            setEndTime
           }} />
+          {/* <EditDialog value={{
+            eventTitle,
+            setEventTitle,
+            selectedRange,
+            setSelectedRange,
+            dialogOpen,
+            setIsDialogOpen,
+            events,
+            setEvents,
+            setNewEvent,
+            selectedEvent,
+            startTime,
+            setStartTime,
+            endTime,
+            setEndTime
+          }}
+          /> */}
         </>
       }
     </div>

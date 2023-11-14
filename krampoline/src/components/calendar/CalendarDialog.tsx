@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import dayjs from 'dayjs';
+import { useState, useEffect } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
-import './timePicker.css'
+import dayjs from 'dayjs';
 import {
     Dialog,
     DialogTitle,
@@ -17,6 +16,7 @@ import {
     createTheme
 } from '@mui/material';
 import React from 'react';
+import { PiCornersOutLight } from 'react-icons/pi';
 
 type Event = {
     id: number;
@@ -30,15 +30,18 @@ type CalendarDialogProps = {
     value: {
         eventTitle: string;
         setEventTitle: React.Dispatch<React.SetStateAction<string>>;
-        selectedRange: {
-            start: Date;
-            end: Date;
-        } | null;
-        setSelectedRange: React.Dispatch<React.SetStateAction<{ start: Date; end: Date } | null>>;
+        selectedRange: { slots: Date[] } | null;
+        setSelectedRange: React.Dispatch<React.SetStateAction<{ slots: Date[] } | null>>;
         isDialogOpen: boolean;
         setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
         events: Event[];
+        setEvents: React.Dispatch<React.SetStateAction<Event[]>>
         setNewEvent: React.Dispatch<React.SetStateAction<Event | null>>;
+        selectedEvent: Event | null;
+        startTime: Date | null;
+        setStartTime: React.Dispatch<React.SetStateAction<Date | null>>;
+        endTime: Date | null;
+        setEndTime: React.Dispatch<React.SetStateAction<Date | null>>;
     };
 };
 
@@ -73,24 +76,30 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
         isDialogOpen,
         setIsDialogOpen,
         events,
-        setNewEvent
+        setEvents,
+        setNewEvent,
+        selectedEvent,
+        startTime,
+        setStartTime,
+        endTime,
+        setEndTime
     } = value;
-
-    const [startTime, setStartTime] = useState<Date | null>(dayjs().toDate());
-    const [endTime, setEndTime] = useState<Date | null>(dayjs().add(1, 'hour').toDate());
 
     const handleCloseDialog = () => {
         setIsDialogOpen(false);
     };
 
     const handleEventSave = () => {
+        setStartTime(dayjs().toDate());
+        setEndTime(dayjs().add(1, 'hour').toDate());
+
         if (eventTitle && selectedRange && startTime && endTime) {
-            const startWithTime = dayjs(selectedRange.start)
+            const startWithTime = dayjs(selectedRange.slots[0])
                 .hour(dayjs(startTime).hour())
                 .minute(dayjs(startTime).minute())
                 .toDate();
 
-            const endWithTime = dayjs(selectedRange.end)
+            const endWithTime = dayjs(selectedRange.slots[selectedRange.slots.length - 1])
                 .hour(dayjs(endTime).hour())
                 .minute(dayjs(endTime).minute())
                 .toDate();
@@ -109,7 +118,6 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
             handleCloseDialog();
         }
     };
-
 
     return (
         <Dialog open={isDialogOpen} TransitionComponent={Slide} onClose={handleCloseDialog} className="w-200 h-300">
@@ -132,7 +140,11 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
                     <div className="flex flex-col md:flex-row">
                         <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-3 mt-8">날짜</h1>
                         <p className="flex justify-between items-center sm:w-50 md:w-[23rem] lg:w-[23rem] xl:w-[23rem] h-12 border-black border-2 rounded-[15px] shadow-standard bg-white my-4 pl-3 ml-2 mt-6">
-                            {selectedRange?.start?.toLocaleDateString()} ~ {selectedRange?.end?.toLocaleDateString() ? new Date(selectedRange.end.getTime() - 24 * 60 * 60 * 1000).toLocaleDateString() : ''}
+                            {selectedRange?.slots ? (
+                                selectedRange.slots.length > 2
+                                    ? `${selectedRange.slots[0].toLocaleDateString()} ~ ${selectedRange.slots[selectedRange.slots.length - 1].toLocaleDateString()}`
+                                    : selectedRange.slots.map(date => date.toLocaleDateString()).join(' ~ ')
+                            ) : ''}
                         </p>
                     </div>
                     <div className="flex flex-col md:flex-row">
