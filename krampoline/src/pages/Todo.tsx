@@ -21,7 +21,7 @@ function Todo() {
         start: new Date(todo.start),
         end: new Date(todo.end),
       }));
-      console.log(todosWithDatesConverted);
+
       setTodos(todosWithDatesConverted);
     } else {
       setTodos([]);
@@ -29,7 +29,6 @@ function Todo() {
   }, []);
 
   const today = new Date();
-  console.log(today);
 
   const todayTodos = todos.filter(
     (todo) =>
