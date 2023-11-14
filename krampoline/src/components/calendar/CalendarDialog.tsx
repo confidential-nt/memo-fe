@@ -35,7 +35,6 @@ type CalendarDialogProps = {
         events: Event[];
         setEvents: React.Dispatch<React.SetStateAction<Event[]>>
         setNewEvent: React.Dispatch<React.SetStateAction<Event | null>>;
-        selectedEvent: Event | null;
         startTime: Date | null;
         setStartTime: React.Dispatch<React.SetStateAction<Date | null>>;
         endTime: Date | null;
