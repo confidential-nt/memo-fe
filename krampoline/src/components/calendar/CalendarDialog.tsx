@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
@@ -16,7 +15,6 @@ import {
     createTheme
 } from '@mui/material';
 import React from 'react';
-import { PiCornersOutLight } from 'react-icons/pi';
 
 type Event = {
     id: number;
@@ -76,9 +74,7 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
         isDialogOpen,
         setIsDialogOpen,
         events,
-        setEvents,
         setNewEvent,
-        selectedEvent,
         startTime,
         setStartTime,
         endTime,

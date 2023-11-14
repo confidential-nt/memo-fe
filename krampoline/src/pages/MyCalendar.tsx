@@ -45,7 +45,6 @@ const MyCalendar = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [startTime, setStartTime] = useState<Date | null>(dayjs().toDate());
   const [endTime, setEndTime] = useState<Date | null>(dayjs().add(1, 'hour').toDate());
-  // const [openEditDialog, setOpenEditDialog] = useState(false);
 
   useEffect(() => {
     if (newEvent) {
@@ -81,12 +80,7 @@ const MyCalendar = () => {
     setStartTime(startDate);
     setEndTime(endDate);
 
-    // setOpenEditDialog(true);
   }
-
-  // const handleCloseEditDialog = () => {
-  //   setOpenEditDialog(false);
-  // };
 
   return (
     <div className="h-[30rem]">
@@ -124,23 +118,6 @@ const MyCalendar = () => {
             endTime,
             setEndTime
           }} />
-          {/* <EditDialog value={{
-            eventTitle,
-            setEventTitle,
-            selectedRange,
-            setSelectedRange,
-            dialogOpen,
-            setIsDialogOpen,
-            events,
-            setEvents,
-            setNewEvent,
-            selectedEvent,
-            startTime,
-            setStartTime,
-            endTime,
-            setEndTime
-          }}
-          /> */}
         </>
       }
     </div>
