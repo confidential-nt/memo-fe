@@ -2,39 +2,54 @@ import { useState, useEffect } from "react";
 import Tasks from "../components/todo/Tasks";
 
 export type TodoItem = {
-  id: string;
-  content: string;
+  id: number;
+  title: string;
   status: string;
+  start: Date;
+  end: Date;
 };
 
 function Todo() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
 
   useEffect(() => {
-    fetch(`data/todos.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setTodos(data);
-      });
+    const initialTodosJSON = localStorage.getItem("eventsData");
+    if (initialTodosJSON) {
+      const initialTodos = JSON.parse(initialTodosJSON);
+      if (Array.isArray(initialTodos)) {
+        setTodos(initialTodos);
+      } else {
+        setTodos([]);
+      }
+    } else {
+      setTodos([]);
+    }
   }, []);
 
   const handleUpdate = (updated: TodoItem) => {
-    setTodos(todos.map((t) => (t.id === updated.id ? updated : t)));
+    const updatedTodos = todos.map((t) => (t.id === updated.id ? updated : t));
+    updateAndStoreTodos(updatedTodos);
   };
 
   const handleDelete = (deleted: TodoItem) => {
-    setTodos(todos.filter((t) => t.id !== deleted.id));
+    const deletedTodos = todos.filter((t) => t.id !== deleted.id);
+    updateAndStoreTodos(deletedTodos);
+  };
+
+  const updateAndStoreTodos = (updatedTodos: TodoItem[]) => {
+    setTodos(updatedTodos);
+    localStorage.setItem("eventsData", JSON.stringify(updatedTodos));
   };
 
   return (
     <div className="pb-16 md:flex flex-row justify-between mx-4">
-      <div className="flex flex-col m-4 md:w-1/2 mr-6">
+      <div className="flex flex-col m-4 pb-6 md:w-1/2">
         <label className="w-32 h-10 shrink-0 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2">
           오늘 할 일
         </label>
         <Tasks todos={todos} onDelete={handleDelete} onUpdate={handleUpdate} />
       </div>
-      <div className="flex flex-col m-4 md:w-1/2 ml-6">
+      <div className="flex flex-col m-4 md:w-1/2">
         <label className="w-32 h-10 shrink-0 bg-amber-500 border-black border-2 rounded-full flex items-center font-bold justify-center my-2">
           진행 중 할 일
         </label>

@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { MdOutlineCreate, MdOutlineSaveAlt } from "react-icons/md";
 import { HiOutlineBackspace, HiOutlineTrash } from "react-icons/hi";
@@ -11,12 +11,16 @@ type Props = {
 };
 
 function Task({ todo, onUpdate, onDelete }: Props) {
-  const { id, content, status } = todo;
+  const { id, title, status } = todo;
   const [isEditing, setIsEditing] = useState(false);
-  const [editedContent, setEditedContent] = useState(content);
+  const [editedContent, setEditedContent] = useState(title);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onUpdate({ ...todo, status: e.target.checked ? "completed" : "active" });
+    const updatedStatus = e.target.checked ? "completed" : "active";
+    onUpdate({ ...todo, status: updatedStatus });
+
+    const updatedTodo = { ...todo, status: updatedStatus };
+    localStorage.setItem(`todo_${id}`, JSON.stringify(updatedTodo));
   };
 
   const handleDelete = () => onDelete(todo);
@@ -27,9 +31,19 @@ function Task({ todo, onUpdate, onDelete }: Props) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onUpdate({ ...todo, content: editedContent });
+    const updatedTodo = { ...todo, title: editedContent };
+    localStorage.setItem(`todo_${id}`, JSON.stringify(updatedTodo));
+    onUpdate(updatedTodo);
     setIsEditing(false);
   };
+
+  useEffect(() => {
+    const savedTodo = localStorage.getItem(`todo_${id}`);
+    if (savedTodo) {
+      const parsedTodo = JSON.parse(savedTodo);
+      setEditedContent(parsedTodo.title);
+    }
+  }, [id]);
 
   if (isEditing) {
     return (
@@ -62,20 +76,20 @@ function Task({ todo, onUpdate, onDelete }: Props) {
     <li className="flex justify-between items-center w-30 h-12 shrink-0 border-black border-2 rounded-[15px] shadow-standard bg-white my-4">
       <div className="flex justify-left items-center">
         <Checkbox
-          id={id}
+          id={id.toString()}
           checked={status === "completed"}
           onChange={handleChange}
           color="secondary"
           className="cursor-pointer"
         />
         <label
-          htmlFor={id}
+          htmlFor={id.toString()}
           className="flex justify-left items-center"
           style={{
             textDecoration: status === "completed" ? "line-through" : "none",
           }}
         >
-          {content}
+          {title}
         </label>
       </div>
       <span className="flex justify-right items-center">
