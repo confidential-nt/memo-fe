@@ -15,16 +15,34 @@ function Todo() {
   useEffect(() => {
     const initialTodosJSON = localStorage.getItem("eventsData");
     if (initialTodosJSON) {
-      const initialTodos = JSON.parse(initialTodosJSON);
-      if (Array.isArray(initialTodos)) {
-        setTodos(initialTodos);
-      } else {
-        setTodos([]);
-      }
+      const initialTodos = JSON.parse(initialTodosJSON) as TodoItem[];
+      const todosWithDatesConverted = initialTodos.map((todo) => ({
+        ...todo,
+        start: new Date(todo.start),
+        end: new Date(todo.end),
+      }));
+      console.log(todosWithDatesConverted);
+      setTodos(todosWithDatesConverted);
     } else {
       setTodos([]);
     }
   }, []);
+
+  const today = new Date();
+  console.log(today);
+
+  const todayTodos = todos.filter(
+    (todo) =>
+      todo.start.toDateString() === today.toDateString() &&
+      todo.end.toDateString() === today.toDateString()
+  );
+
+  const inProgressTodos = todos.filter(
+    (todo) =>
+      todo.start < today &&
+      todo.end > today &&
+      !todayTodos.some((todayTodo) => todayTodo.id === todo.id)
+  );
 
   const handleUpdate = (updated: TodoItem) => {
     const updatedTodos = todos.map((t) => (t.id === updated.id ? updated : t));
@@ -47,13 +65,21 @@ function Todo() {
         <label className="w-32 h-10 shrink-0 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2">
           오늘 할 일
         </label>
-        <Tasks todos={todos} onDelete={handleDelete} onUpdate={handleUpdate} />
+        <Tasks
+          todos={todayTodos}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+        />
       </div>
       <div className="flex flex-col m-4 md:w-1/2">
         <label className="w-32 h-10 shrink-0 bg-amber-500 border-black border-2 rounded-full flex items-center font-bold justify-center my-2">
           진행 중 할 일
         </label>
-        <Tasks todos={todos} onDelete={handleDelete} onUpdate={handleUpdate} />
+        <Tasks
+          todos={inProgressTodos}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+        />
       </div>
     </div>
   );
