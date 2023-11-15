@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { HiOutlineTrash } from "react-icons/hi";
 
 type Event = {
     id: number;
@@ -59,9 +60,7 @@ const EditDialog: React.FC<EditDialogProps> = ({ value }) => {
         setEventTitle,
         selectedRange,
         setSelectedRange,
-        events,
         setEvents,
-        setNewEvent,
         selectedEvent,
         startTime,
         setStartTime,
@@ -104,9 +103,31 @@ const EditDialog: React.FC<EditDialogProps> = ({ value }) => {
         handleCloseEditDialog();
     };
 
+    const handleEventDelete = () => {
+        if (selectedEvent) {
+            const storedEvents = JSON.parse(localStorage.getItem('eventsData') || '[]');
+            const updatedEvents = storedEvents.filter((event: Event) => event.id !== selectedEvent.id);
+
+            localStorage.setItem('eventsData', JSON.stringify(updatedEvents));
+
+            setEvents(updatedEvents);
+            setEventTitle('');
+            setSelectedRange(null);
+            setStartTime(dayjs().toDate());
+            setEndTime(dayjs().add(1, 'hour').toDate());
+            handleCloseEditDialog();
+        }
+    };
+
     return (
         <Dialog open={openEditDialog} TransitionComponent={Slide} onClose={handleCloseEditDialog} className="w-200 h-300">
-            <DialogTitle className="border-b-2">Todo 입력</DialogTitle>
+            <DialogTitle className="border-b-2 flex justify-between items-center">
+                <span className="flex-1">Todo 입력</span>
+                <HiOutlineTrash
+                    onClick={handleEventDelete}
+                    className="w-6 h-6 mx-1 cursor-pointer"
+                />
+            </DialogTitle>
             <DialogContent>
                 <DialogContentText>
                     <ThemeProvider theme={theme}>
