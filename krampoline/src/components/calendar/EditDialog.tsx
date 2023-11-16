@@ -7,7 +7,7 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { HiOutlineTrash } from "react-icons/hi";
 
 type Event = {
-    id: number;
+    id: string;
     title: string;
     status: string;
     start: Date;
@@ -107,17 +107,16 @@ const EditDialog: React.FC<EditDialogProps> = ({ value }) => {
         if (selectedEvent) {
             const storedEvents = JSON.parse(localStorage.getItem('eventsData') || '[]');
             const updatedEvents = storedEvents.filter((event: Event) => event.id !== selectedEvent.id);
-
             localStorage.setItem('eventsData', JSON.stringify(updatedEvents));
-
-            setEvents(updatedEvents);
-            setEventTitle('');
-            setSelectedRange(null);
-            setStartTime(dayjs().toDate());
-            setEndTime(dayjs().add(1, 'hour').toDate());
+    
+            setEvents((prevEvents) => {
+                const updated = prevEvents.filter((event: Event) => event.id !== selectedEvent.id);
+                return updated;
+            });
             handleCloseEditDialog();
         }
     };
+    
 
     return (
         <Dialog open={openEditDialog} TransitionComponent={Slide} onClose={handleCloseEditDialog} className="w-200 h-300">

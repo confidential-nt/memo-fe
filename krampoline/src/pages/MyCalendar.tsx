@@ -29,7 +29,7 @@ function readTodosFromLocalStorage() {
 }
 
 type Event = {
-  id: number;
+  id: string;
   title: string;
   status: string,
   start: Date;
