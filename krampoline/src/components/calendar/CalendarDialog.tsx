@@ -2,7 +2,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import dayjs from 'dayjs';
+
 import { v4 as uuidv4 } from 'uuid';
+
 import {
     Dialog,
     DialogTitle,
@@ -18,6 +20,7 @@ import {
 import React from 'react';
 
 type Event = {
+
     id: string;
     title: string;
     status: string;
@@ -36,6 +39,7 @@ type CalendarDialogProps = {
         events: Event[];
         setEvents: React.Dispatch<React.SetStateAction<Event[]>>
         setNewEvent: React.Dispatch<React.SetStateAction<Event | null>>;
+
         selectedEvent: Event | null;
         startTime: Date | null;
         setStartTime: React.Dispatch<React.SetStateAction<Date | null>>;
@@ -74,6 +78,9 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
         setSelectedRange,
         isDialogOpen,
         setIsDialogOpen,
+
+        events,
+
         setNewEvent,
         startTime,
         setStartTime,
@@ -101,7 +108,10 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
                 .toDate();
 
             const event: Event = {
+
                 id: uuidv4(),
+
+
                 title: eventTitle,
                 status: '진행중',
                 start: startWithTime,
