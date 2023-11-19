@@ -95,7 +95,14 @@ const EditDialog: React.FC<EditDialogProps> = ({ value }) => {
 
         localStorage.setItem('eventsData', JSON.stringify(updatedEvents));
 
-        setEvents(updatedEvents);
+        setEvents((prevEvents) => {
+            const filteredEvents = prevEvents.map((event: Event) =>
+                event.id === selectedEvent?.id ? updatedEvent : event
+            ).filter((event): event is Event => event !== undefined);
+        
+            return filteredEvents;
+        });
+        
         setEventTitle('');
         setSelectedRange(null);
         setStartTime(dayjs().toDate());
