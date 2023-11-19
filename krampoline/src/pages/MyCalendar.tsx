@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import dayjs from 'dayjs';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import CalendarDialog from '../components/calendar/CalendarDialog';
+import EditDialog from '../components/calendar/EditDialog';
 
 
 const localizer = luxonLocalizer(DateTime);
@@ -29,7 +30,9 @@ function readTodosFromLocalStorage() {
 }
 
 type Event = {
-  id: number;
+
+  id: string;
+
   title: string;
   status: string,
   start: Date;
@@ -42,8 +45,12 @@ const MyCalendar = () => {
   const [eventTitle, setEventTitle] = useState('');
   const [selectedRange, setSelectedRange] = useState<{ slots: Date[] } | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [startTime, setStartTime] = useState<Date | null>(dayjs().toDate());
   const [endTime, setEndTime] = useState<Date | null>(dayjs().add(1, 'hour').toDate());
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+
 
   useEffect(() => {
     if (newEvent) {
@@ -65,6 +72,24 @@ const MyCalendar = () => {
     handleOpenDialog();
   };
 
+
+  const handleOnClick = (event: Event) => {
+    setSelectedEvent(event);
+    setEventTitle(event.title);
+
+    const startDate = new Date(event.start);
+    const endDate = new Date(event.end);
+    const isSameDate = startDate.toDateString() === endDate.toDateString();
+    const dateArray = isSameDate ? [startDate] : [startDate, endDate];
+
+    setSelectedRange({ slots: dateArray });
+
+    setStartTime(startDate);
+    setEndTime(endDate);
+
+    setOpenEditDialog(true);
+  }
+
   return (
     <div className="h-[30rem]">
       {
@@ -82,6 +107,9 @@ const MyCalendar = () => {
             }}
             selectable
             onSelectSlot={handleSelectSlot}
+
+            onSelectEvent={handleOnClick}
+
             popup
           />
           <CalendarDialog value={{
@@ -94,14 +122,33 @@ const MyCalendar = () => {
             events,
             setEvents,
             setNewEvent,
+
+            selectedEvent,
+
             startTime,
             setStartTime,
             endTime,
             setEndTime
 
-
-
           }} />
+          <EditDialog value={{
+            eventTitle,
+            setEventTitle,
+            selectedRange,
+            setSelectedRange,
+            events,
+            setEvents,
+            setNewEvent,
+            selectedEvent,
+            startTime,
+            setStartTime,
+            endTime,
+            setEndTime,
+            openEditDialog,
+            setOpenEditDialog
+          }}
+          />
+
         </>
       }
     </div>

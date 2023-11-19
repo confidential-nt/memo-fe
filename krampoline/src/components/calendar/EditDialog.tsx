@@ -1,26 +1,12 @@
+import React from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Slide, TextField, ThemeProvider, createTheme } from '@mui/material';
+import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
-import dayjs from 'dayjs';
-
-import { v4 as uuidv4 } from 'uuid';
-
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
-    Button,
-    Slide,
-    TextField,
-    ThemeProvider,
-    createTheme
-} from '@mui/material';
-import React from 'react';
+import { HiOutlineTrash } from "react-icons/hi";
 
 type Event = {
-
     id: string;
     title: string;
     status: string;
@@ -28,23 +14,22 @@ type Event = {
     end: Date;
 };
 
-type CalendarDialogProps = {
+type EditDialogProps = {
     value: {
         eventTitle: string;
         setEventTitle: React.Dispatch<React.SetStateAction<string>>;
         selectedRange: { slots: Date[] } | null;
         setSelectedRange: React.Dispatch<React.SetStateAction<{ slots: Date[] } | null>>;
-        isDialogOpen: boolean;
-        setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
         events: Event[];
         setEvents: React.Dispatch<React.SetStateAction<Event[]>>
         setNewEvent: React.Dispatch<React.SetStateAction<Event | null>>;
-
         selectedEvent: Event | null;
         startTime: Date | null;
         setStartTime: React.Dispatch<React.SetStateAction<Date | null>>;
         endTime: Date | null;
         setEndTime: React.Dispatch<React.SetStateAction<Date | null>>;
+        openEditDialog: boolean;
+        setOpenEditDialog: React.Dispatch<React.SetStateAction<boolean>>;
     };
 };
 
@@ -69,65 +54,86 @@ const theme = createTheme({
     },
 });
 
-
-const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
+const EditDialog: React.FC<EditDialogProps> = ({ value }) => {
     const {
         eventTitle,
         setEventTitle,
         selectedRange,
         setSelectedRange,
-        isDialogOpen,
-        setIsDialogOpen,
-
-        events,
-
-        setNewEvent,
+        setEvents,
+        selectedEvent,
         startTime,
         setStartTime,
         endTime,
-        setEndTime
+        setEndTime,
+        openEditDialog,
+        setOpenEditDialog
     } = value;
 
-    const handleCloseDialog = () => {
-        setIsDialogOpen(false);
-    };
-
-    const handleEventSave = () => {
+    const handleCloseEditDialog = () => {
+        setEventTitle('');
+        setSelectedRange(null);
         setStartTime(dayjs().toDate());
         setEndTime(dayjs().add(1, 'hour').toDate());
-
-        if (eventTitle && selectedRange && startTime && endTime) {
-            const startWithTime = dayjs(selectedRange.slots[0])
-                .hour(dayjs(startTime).hour())
-                .minute(dayjs(startTime).minute())
-                .toDate();
-
-            const endWithTime = dayjs(selectedRange.slots[selectedRange.slots.length - 1])
-                .hour(dayjs(endTime).hour())
-                .minute(dayjs(endTime).minute())
-                .toDate();
-
-            const event: Event = {
-
-                id: uuidv4(),
-
-
-                title: eventTitle,
-                status: '진행중',
-                start: startWithTime,
-                end: endWithTime,
-            };
-
-            setNewEvent(event);
-            setEventTitle('');
-            setSelectedRange(null);
-            handleCloseDialog();
-        }
+        setOpenEditDialog(false);
     };
 
+    const handleEditSave = () => {
+        const updatedEvent = selectedEvent
+            ? {
+                id: selectedEvent.id,
+                title: eventTitle,
+                start: startTime,
+                end: endTime,
+            }
+            : undefined;
+
+        const storedEvents = JSON.parse(localStorage.getItem('eventsData') || '[]');
+        const updatedEvents = storedEvents.map((event: Event) =>
+            event.id === selectedEvent?.id ? updatedEvent : event
+        );
+
+        localStorage.setItem('eventsData', JSON.stringify(updatedEvents));
+
+        setEvents((prevEvents) => {
+            const filteredEvents = prevEvents.map((event: Event) =>
+                event.id === selectedEvent?.id ? updatedEvent : event
+            ).filter((event): event is Event => event !== undefined);
+        
+            return filteredEvents;
+        });
+        
+        setEventTitle('');
+        setSelectedRange(null);
+        setStartTime(dayjs().toDate());
+        setEndTime(dayjs().add(1, 'hour').toDate());
+        handleCloseEditDialog();
+    };
+
+    const handleEventDelete = () => {
+        if (selectedEvent) {
+            const storedEvents = JSON.parse(localStorage.getItem('eventsData') || '[]');
+            const updatedEvents = storedEvents.filter((event: Event) => event.id !== selectedEvent.id);
+            localStorage.setItem('eventsData', JSON.stringify(updatedEvents));
+    
+            setEvents((prevEvents) => {
+                const updated = prevEvents.filter((event: Event) => event.id !== selectedEvent.id);
+                return updated;
+            });
+            handleCloseEditDialog();
+        }
+    };
+    
+
     return (
-        <Dialog open={isDialogOpen} TransitionComponent={Slide} onClose={handleCloseDialog} className="w-200 h-300">
-            <DialogTitle className="border-b-2">Todo 입력</DialogTitle>
+        <Dialog open={openEditDialog} TransitionComponent={Slide} onClose={handleCloseEditDialog} className="w-200 h-300">
+            <DialogTitle className="border-b-2 flex justify-between items-center">
+                <span className="flex-1">Todo 입력</span>
+                <HiOutlineTrash
+                    onClick={handleEventDelete}
+                    className="w-6 h-6 mx-1 cursor-pointer"
+                />
+            </DialogTitle>
             <DialogContent>
                 <DialogContentText>
                     <ThemeProvider theme={theme}>
@@ -185,11 +191,11 @@ const CalendarDialog: React.FC<CalendarDialogProps> = ({ value }) => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions className="border-t-2">
-                <Button onClick={handleEventSave}>입력</Button>
-                <Button onClick={handleCloseDialog}>취소</Button>
+                <Button onClick={handleEditSave}>입력</Button>
+                <Button onClick={handleCloseEditDialog}>취소</Button>
             </DialogActions>
         </Dialog>
-    )
-}
+    );
+};
 
-export default CalendarDialog
+export default EditDialog;
