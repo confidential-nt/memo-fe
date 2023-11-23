@@ -138,7 +138,7 @@ const EditDialog: React.FC<EditDialogProps> = ({ value }) => {
                 <DialogContentText>
                     <ThemeProvider theme={theme}>
                         <div className="flex flex-col md:flex-row mt-2">
-                            <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-5 mt-4">Todo</h1>
+                            <h1 className="w-[30%] h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-5 mt-4">TODO</h1>
                             <TextField
                                 variant="standard"
                                 InputProps={{
@@ -150,8 +150,8 @@ const EditDialog: React.FC<EditDialogProps> = ({ value }) => {
                         </div>
                     </ThemeProvider>
                     <div className="flex flex-col md:flex-row">
-                        <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-3 mt-8">날짜</h1>
-                        <p className="flex justify-between items-center sm:w-50 md:w-[23rem] lg:w-[23rem] xl:w-[23rem] h-12 border-black border-2 rounded-[15px] shadow-standard bg-white my-4 pl-3 ml-2 mt-6">
+                        <h1 className="w-[30%] h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-1 mr-5 mt-6">DATE</h1>
+                        <p className="flex justify-between items-center md:w-[85%] h-12 border-black border-2 rounded-[15px] shadow-standard bg-white my-4 pl-3">
                             {selectedRange?.slots ? (
                                 selectedRange.slots.length > 2
                                     ? `${selectedRange.slots[0].toLocaleDateString()} ~ ${selectedRange.slots[selectedRange.slots.length - 1].toLocaleDateString()}`
@@ -160,7 +160,7 @@ const EditDialog: React.FC<EditDialogProps> = ({ value }) => {
                         </p>
                     </div>
                     <div className="flex flex-col md:flex-row">
-                        <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-5 mt-4">시작 시간</h1>
+                        <h1 className="w-[30%] lg:w-[25%] h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-3 mt-4 mr-5">START</h1>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <MobileTimePicker
                                 value={dayjs(startTime)}
@@ -172,8 +172,8 @@ const EditDialog: React.FC<EditDialogProps> = ({ value }) => {
                             />
                         </LocalizationProvider>
                     </div>
-                    <div className="flex flex-col md:flex-row">
-                        <h1 className="w-24 h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-2 mr-5 mt-4">마감 시간</h1>
+                    <div className="flex flex-col md:flex-row mt-3">
+                        <h1 className="w-[30%] lg:w-[25%] h-8 bg-amber-400 border-black border-2 rounded-full flex items-center font-bold justify-center my-3 mt-4 mr-5">END</h1>
                         <LocalizationProvider
                             dateAdapter={AdapterDayjs}
                         >
@@ -185,7 +185,6 @@ const EditDialog: React.FC<EditDialogProps> = ({ value }) => {
                                     }
                                 }}
                             />
-
                         </LocalizationProvider>
                     </div>
                 </DialogContentText>
