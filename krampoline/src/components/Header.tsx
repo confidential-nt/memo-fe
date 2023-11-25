@@ -1,9 +1,14 @@
 import { useEffect } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
+import { KAKAO_AUTH_URL } from "../common/kakao";
+import { useAuthContext } from "../context/AuthContext";
 
 export default function Header() {
   const { pathname } = useLocation();
+  const { user, isInitializing } = useAuthContext();
+
+  const notUserLoggedIn = !user && !isInitializing;
 
   useEffect(() => {}, [pathname]);
 
@@ -22,6 +27,9 @@ export default function Header() {
       <h1 className="text-center capitalize font-bold">
         {pathname === "/" ? "Todo" : pathname.substring(1)}
       </h1>
+      {notUserLoggedIn ? (
+        <a href={KAKAO_AUTH_URL}>카카오로 로그인하기</a>
+      ) : null}
     </header>
   );
 }
