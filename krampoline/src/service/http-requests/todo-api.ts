@@ -1,6 +1,5 @@
 import axios from "axios";
 import { TodoApiRoute } from "../../common/route";
-import { Event } from "../../pages/MyCalendar";
 
 export async function getTodos() {
   return axios
@@ -22,7 +21,7 @@ export async function getTodosInProgress() {
     .catch(console.log);
 }
 
-export async function addTodo(todo: Event) {
+export async function addTodo() {
   return axios.post(TodoApiRoute.TO_DOS, {});
 }
 
