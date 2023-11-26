@@ -7,7 +7,8 @@ import {
   deleteDirectory as deleteDirectoryAPI,
   deleteMemo as deleteMemoAPI,
   updateDirectory as updateDirectoryAPI,
-  updateMemo as updateMemoAPI,
+  renameMemo as renameMemoAPI,
+  updateMemoContent as updateMemoContentAPI,
   addSubDirectory as addSubDirectoryAPI,
   addMemoToSubDirectory as addMemoToSubDirectoryAPI,
   moveRootMemoToDirectory as moveRootMemoToDirectoryAPI,
@@ -126,17 +127,20 @@ export default function useMemoStore() {
     },
   });
 
-  const updateMemo = useMutation({
-    mutationFn: ({
-      memoId,
-      title,
-      content,
-    }: {
-      memoId: string;
-      title: string;
-      content: string;
-    }) => updateMemoAPI(memoId, title, content),
+  const renameMemo = useMutation({
+    mutationFn: ({ memoId, title }: { memoId: string; title: string }) =>
+      renameMemoAPI(memoId, title),
 
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [baseQuery, user?.email],
+      });
+    },
+  });
+
+  const updateMemoContent = useMutation({
+    mutationFn: ({ memoId, content }: { memoId: string; content: string }) =>
+      updateMemoContentAPI(memoId, content),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [baseQuery, user?.email],
@@ -257,7 +261,8 @@ export default function useMemoStore() {
     deleteDirectory,
     deleteMemo,
     updateDirectory,
-    updateMemo,
+    renameMemo,
+    updateMemoContent,
     moveRootMemoToDirectory,
     moveMemoToDirectory,
     moveMemoToRoot,

@@ -42,16 +42,18 @@ export async function updateDirectory(directoryId: string, name: string) {
     name,
   });
 }
-export async function updateMemo(
-  memoId: string,
-  title: string,
-  content: string
-) {
+export async function renameMemo(memoId: string, title: string) {
   return axios.patch(MemoApiRoute.MEMO(memoId), {
     title,
+  });
+}
+
+export async function updateMemoContent(memoId: string, content: string) {
+  return axios.put(MemoApiRoute.MEMO(memoId), {
     content,
   });
 }
+
 export async function addSubDirectory(
   directoryId: string,
   name: string = "새 폴더"

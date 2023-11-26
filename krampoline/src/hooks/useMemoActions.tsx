@@ -1,4 +1,3 @@
-import { useAuthContext } from "../context/AuthContext";
 import { useUserContext } from "../context/UserContext";
 import {
   addMemoToDirectory,
@@ -29,7 +28,6 @@ type ActionMap = {
 
 export default function useMemoActions(directory: string | null) {
   const { tempUserId } = useUserContext();
-  const { user } = useAuthContext();
 
   const onCreate = ({ type }: onCreateArgs) => {
     const actionMap: ActionMap = {
