@@ -1,19 +1,14 @@
 import { useEffect } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
-import { KAKAO_AUTH_URL } from "../common/kakao";
-import { useAuthContext } from "../context/AuthContext";
 
 export default function Header() {
   const { pathname } = useLocation();
-  const { user, isInitializing } = useAuthContext();
-
-  const notUserLoggedIn = !user && !isInitializing;
 
   useEffect(() => {}, [pathname]);
 
   return (
-    <header className="bg-main-mint border-b-2 border-black px-4 pt-4 pb-1 fixed top-0 left-0 w-full z-10 md:px-80">
+    <header className="bg-main-mint border-b-2 border-black px-4 pt-4 pb-1 fixed top-0 left-0 w-full z-10 md:px-40 lg:px-60">
       <form className="flex items-center mb-2">
         <input
           type="text"
@@ -27,9 +22,6 @@ export default function Header() {
       <h1 className="text-center capitalize font-bold">
         {pathname === "/" ? "Todo" : pathname.substring(1)}
       </h1>
-      {notUserLoggedIn ? (
-        <a href={KAKAO_AUTH_URL}>카카오로 로그인하기</a>
-      ) : null}
     </header>
   );
 }
