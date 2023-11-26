@@ -10,6 +10,7 @@ export default function Router() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Navigate to="/today" replace />} />
+        <Route path="/" element={<Todo />} />
         <Route path="/today" index element={<Todo />} />
         <Route path="/openApi/kakao" element={<Login />}></Route>
         <Route path="/calendar" element={<MyCalendar />} />
