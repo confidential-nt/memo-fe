@@ -49,3 +49,11 @@ export const MemoApiRoute = {
     return `/api/directories/${parentDirectoryId}/${directoryId}/move-root`;
   },
 };
+
+export const TodoApiRoute = {
+  TO_DOS: BASE_URL + "/api/todos",
+  TO_DO(todoId: string) {
+    return BASE_URL + `/api/todos/${todoId}`;
+  },
+  TO_DO_IN_PROGRESS: BASE_URL + "/api/todos/in-progress",
+};
