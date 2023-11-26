@@ -22,7 +22,7 @@ type ActionType = "internal" | "leaf";
 
 type ActionMap = {
   [key in ActionType]:
-    | ((parentDirectoryId: string) => Promise<void>)
+    | ((parentDirectoryId: string) => void)
     | ((userId: string) => "" | Promise<void> | undefined);
 };
 

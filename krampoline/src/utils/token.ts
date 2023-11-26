@@ -1,4 +1,4 @@
-import { User } from "../context/AuthContext";
+import { AuthenticatedUser } from "../types/Auth.types";
 
 export function getToken(name: string) {
   const value = `; ${document.cookie}`;
@@ -9,9 +9,9 @@ export function getToken(name: string) {
   }
 }
 
-export function decodeToken(token: string): User | null {
+export function decodeToken(token: string): AuthenticatedUser | null {
   const [_, payloadEncoded] = token.split(".");
-
+  if (!payloadEncoded) return null;
   const payloadStr = atob(payloadEncoded);
 
   const payloadObj = JSON.parse(payloadStr);

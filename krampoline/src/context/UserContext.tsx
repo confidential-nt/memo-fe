@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { initMemoStore } from "../service/database/api";
-
-export const LOCALSTORAGE_KEY = "UID";
+import { BEFORE_AUTH_KEY } from "../common/local-storage";
 
 export interface UserContextProps {
   tempUserId?: string;
@@ -20,10 +19,10 @@ export function UserContextProvider({ children }: Props) {
   const [tempUserId, setTempUserId] = useState<string>();
 
   useEffect(() => {
-    let tempUserId = localStorage.getItem(LOCALSTORAGE_KEY);
+    let tempUserId = localStorage.getItem(BEFORE_AUTH_KEY);
     if (!tempUserId) {
       tempUserId = uuid();
-      localStorage.setItem(LOCALSTORAGE_KEY, tempUserId);
+      localStorage.setItem(BEFORE_AUTH_KEY, tempUserId);
     }
     initMemoStore(tempUserId);
     setTempUserId(tempUserId);
