@@ -35,19 +35,8 @@ export async function addRootMemo(userId: string) {
   await db.memos.add(memo);
 }
 
-export async function addSubDirectory(parentDirectoryId: string) {
-  const parentDirectory = await db.directories.get(parentDirectoryId);
-
-  if (parentDirectory) {
-    const directory: Directory = {
-      id: uuid(),
-      name: "새 폴더",
-      parentId: parentDirectoryId,
-      memoStoreId: parentDirectory.memoStoreId,
-    };
-
-    await db.directories.add(directory);
-  }
+export function addSubDirectory() {
+  alert("비로그인 상태에서는 폴더의 깊이가 1을 초과할 수 없습니다!");
 }
 
 export async function addMemoToDirectory(directoryId: string) {
@@ -88,6 +77,10 @@ export async function moveDirectory(
   directoryId: string,
   parentId?: string | null
 ) {
+  if (parentId) {
+    alert("비로그인 상태에서는 폴더의 깊이가 1을 초과할 수 없습니다!");
+    return;
+  }
   await db.directories.update(directoryId, {
     parentId,
   });
