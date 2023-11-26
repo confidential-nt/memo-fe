@@ -1,7 +1,6 @@
 import axios from "axios";
 import { MemoApiRoute } from "../../common/route";
 import { Directory } from "../../types/Memo.types";
-import { detectOS } from "../../utils/memo";
 
 export async function getMemoStore() {
   return axios
@@ -11,9 +10,7 @@ export async function getMemoStore() {
 }
 
 export async function uploadLocalMemoStoreToServer(memoStore: Directory) {
-  const userOS = detectOS();
-  // `${userOS}에서 작성한 메모` 라는 이름의 폴더에 memoStore을 통째로 넣는 작업 (서버)
-  // 로컬에서도 같은 작업.
+  return axios.post(MemoApiRoute.MEMOSTORE_SYNC, memoStore);
 }
 
 export async function addRootDirectory(name: string = "새 폴더") {

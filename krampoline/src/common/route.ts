@@ -9,6 +9,7 @@ export const KakaoApiRoute = {
 export const MemoApiRoute = {
   ROOT_MEMO_STORE: BASE_URL + "/api/memo-stores",
   ROOT_DIRECTORY: BASE_URL + "/api/directories",
+  MEMOSTORE_SYNC: BASE_URL + "/api/memo-stores/sync",
   ROOT_MEMO: BASE_URL + "/api/memos",
   DIRECTORY(directoryId: string) {
     return `/api/directories/${directoryId}`;
