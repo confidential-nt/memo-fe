@@ -35,3 +35,17 @@ export function transformData(
     children: children.length > 0 ? children : undefined,
   };
 }
+
+export function detectOS() {
+  const userAgent = navigator.userAgent;
+
+  if (userAgent.includes("Win")) return "Windows";
+  if (userAgent.includes("Mac")) return "macOS";
+  if (userAgent.includes("X11")) return "UNIX";
+  if (userAgent.includes("Linux")) return "Linux";
+
+  if (userAgent.includes("Android")) return "Android";
+  if (/iPhone|iPad|iPod/.test(userAgent)) return "iOS";
+
+  return "Unknown OS";
+}

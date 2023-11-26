@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import { Directory, Memo as MemoType } from "../types/Memo.types";
 import { useUserContext } from "../context/UserContext";
 import { getAllMemoStoreQuery } from "../service/database/api";
@@ -6,6 +6,8 @@ import { useLiveQuery } from "dexie-react-hooks";
 import TreeViewHOC from "../components/memo/TreeViewHOC";
 import useMemoActions from "../hooks/useMemoActions";
 import { LuFolderTree } from "react-icons/lu";
+import { useAuthContext } from "../context/AuthContext";
+import useMemoStore from "../hooks/useMemoStore";
 
 const TextEditor = lazy(() => import("../components/memo/TextEditor"));
 
@@ -16,6 +18,7 @@ export default function Memo() {
   const [directory, setDirectory] = useState<string | null>(null);
 
   const { tempUserId } = useUserContext();
+  const { user } = useAuthContext();
   const { onCreate, onDelete, onMove, onRename } = useMemoActions(directory);
 
   const memoStore = useLiveQuery(async () => {
@@ -24,6 +27,26 @@ export default function Memo() {
       return result;
     }
   }, [tempUserId]) as Directory | undefined;
+
+  const { uploadLocalMemoStoreToServer, memoStoreQuery } = useMemoStore();
+
+  const initializeAppAfterLogin = useCallback(() => {
+    memoStore && uploadLocalMemoStoreToServer.mutate({ memoStore });
+  }, [memoStore, uploadLocalMemoStoreToServer]);
+
+  useEffect(() => {
+    if (user) {
+      initializeAppAfterLogin();
+    }
+  }, [initializeAppAfterLogin, user]);
+
+  // useEffect(() => {
+  //   if (user) {
+  //     axios.get(BASE_URL + "/api/memo-stores").then((res) => {
+  //       console.log(res);
+  //     });
+  //   }
+  // }, [user]);
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -66,7 +89,7 @@ export default function Memo() {
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         open={isDrawerOpened}
-        memoStore={memoStore}
+        memoStore={memoStoreQuery.data || memoStore}
       />
       <div className="md:grow">
         <Suspense fallback={<p>loading...</p>}>
@@ -84,7 +107,7 @@ export default function Memo() {
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         open={isDrawerOpened}
-        memoStore={memoStore}
+        memoStore={memoStoreQuery.data || memoStore}
       />
     </section>
   );
