@@ -3,7 +3,10 @@ import { Editor as TinyMCEEditor } from "tinymce";
 import { useCallback, useRef, useState } from "react";
 import debounce from "lodash.debounce";
 import { Memo } from "../../types/Memo.types";
-import { saveMemoContent } from "../../service/database/api";
+import { saveMemoContent as saveMemoContentInLocal } from "../../service/database/api";
+import { useAuthContext } from "../../context/AuthContext";
+import { AuthenticatedUser } from "../../types/Auth.types";
+import useMemoActionsInServer from "../../hooks/useMemoActionsInServer";
 
 const editorInitConfig = {
   height: "85vh",
@@ -43,12 +46,23 @@ type Props = {
 
 export default function TextEditor({ memo }: Props) {
   const editorRef = useRef<TinyMCEEditor | null>(null);
+  const { user } = useAuthContext();
+  const { onSaveMemoContent } = useMemoActionsInServer(null);
   const [dirty, setDirty] = useState(false);
+
+  const saveMemoContent = (
+    memoId: string,
+    content: string,
+    user?: AuthenticatedUser | null
+  ) =>
+    !user
+      ? saveMemoContentInLocal(memoId, content)
+      : onSaveMemoContent(memoId, content);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSave = useCallback(
     debounce(async (value: string, memo: Memo) => {
-      await saveMemoContent(memo.id, value);
+      await saveMemoContent(memo.id, value, user);
       setDirty(false);
     }, 1000),
     []
