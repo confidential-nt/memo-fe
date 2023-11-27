@@ -9,6 +9,7 @@ type TodoFromServer = {
 };
 
 export function transformData(todos: TodoFromServer[], IdNumber?: boolean) {
+  if (!todos) return [];
   return todos.map((todo) => ({
     id: IdNumber ? todo.id : String(todo.id),
     title: todo.content,
