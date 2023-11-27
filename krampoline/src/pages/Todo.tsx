@@ -24,7 +24,7 @@ function Todo() {
         start: new Date(todo.start),
         end: new Date(todo.end),
       }));
-
+      console.log(todoQuery.data);
       setTodos([
         ...todosWithDatesConverted,
         ...(transformData(todoQuery.data, true) as TodoItem[]),
