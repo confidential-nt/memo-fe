@@ -32,6 +32,6 @@ export async function updateTodo(todoId: string) {
   return axios.patch(TodoApiRoute.TO_DO(todoId));
 }
 
-export async function quickInputTodo(todo: string) {
+export async function addQuickInputTodo(todo: string) {
   return axios.post(TodoApiRoute.TO_DO_QUICK_INPUT, todo);
 }

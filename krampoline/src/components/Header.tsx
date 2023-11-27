@@ -1,16 +1,19 @@
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
+import { addQuickInputTodo } from "../service/http-requests/todo-api";
 
 export default function Header() {
   const { pathname } = useLocation();
   const { user } = useAuthContext();
+  const [value, setValue] = useState("");
 
   useEffect(() => {}, [pathname]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    addQuickInputTodo(value).then(() => alert("성공! 새로고침 해주세요!"));
   };
 
   return (
@@ -20,6 +23,8 @@ export default function Header() {
           type="text"
           className="w-full h-[2rem] block border-2 border-black rounded-[15px] shadow-standard mr-5 p-1 disabled:cursor-not-allowed"
           placeholder="ex)#todo 내일까지 과제하기(로그인 후 사용가능)"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
           disabled={!user}
         />
         <button
