@@ -32,7 +32,7 @@ function Todo() {
     } else {
       setTodos([]);
     }
-  }, []);
+  }, [todoQuery.data]);
 
   const today = new Date();
 
