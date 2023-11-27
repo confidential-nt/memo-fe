@@ -73,7 +73,7 @@ export async function addMemoToSubDirectory(
   });
 }
 
-export async function moveRootMemoToDirectory(
+export async function moveRootMemoToDirectory( // x
   memoId: string,
   targetDirectoryId: string
 ) {
@@ -82,7 +82,7 @@ export async function moveRootMemoToDirectory(
   );
 }
 
-export async function moveMemoToDirectory(
+export async function moveMemoToDirectory( // o
   memoId: string,
   parentDirectoryId: string,
   targetDirectoryId: string
@@ -96,14 +96,14 @@ export async function moveMemoToDirectory(
   );
 }
 
-export async function moveMemoToRoot(
+export async function moveMemoToRoot( // o
   memoId: string,
   parentDirectoryId: string
 ) {
   return axios.put(MemoApiRoute.MOVE_MEMO_TO_ROOT(memoId, parentDirectoryId));
 }
 
-export async function moveRootDirectoryToDirectory(
+export async function moveRootDirectoryToDirectory( // x
   directoryId: string,
   targetDirectoryId: string
 ) {
@@ -115,7 +115,7 @@ export async function moveRootDirectoryToDirectory(
   );
 }
 
-export async function moveDirectoryToDirectory(
+export async function moveDirectoryToDirectory( // o
   directoryId: string,
   parentDirectoryId: string,
   targetDirectoryId: string
@@ -129,7 +129,7 @@ export async function moveDirectoryToDirectory(
   );
 }
 
-export async function moveDirectoryToRoot(
+export async function moveDirectoryToRoot( // o
   directoryId: string,
   parentDirectoryId: string
 ) {

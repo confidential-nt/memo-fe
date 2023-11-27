@@ -82,6 +82,17 @@ export default function useMemoActionsInServer(directory: string | null) {
     parentDirectoryId?: string,
     targetDirectoryId?: string | null
   ) => {
+    if (
+      parentDirectoryId === "__REACT_ARBORIST_INTERNAL_ROOT__" &&
+      targetDirectoryId
+    ) {
+      moveRootDirectoryToDirectory.mutate({
+        directoryId,
+        targetDirectoryId,
+      });
+      return;
+    }
+
     if (parentDirectoryId && targetDirectoryId)
       moveDirectoryToDirectory.mutate({
         directoryId,
@@ -93,11 +104,6 @@ export default function useMemoActionsInServer(directory: string | null) {
         directoryId,
         parentDirectoryId,
       });
-    if (targetDirectoryId && !parentDirectoryId)
-      moveRootDirectoryToDirectory.mutate({
-        directoryId,
-        targetDirectoryId,
-      });
   };
 
   const moveMemo = (
@@ -105,6 +111,17 @@ export default function useMemoActionsInServer(directory: string | null) {
     parentDirectoryId?: string,
     targetDirectoryId?: string | null
   ) => {
+    if (
+      parentDirectoryId === "__REACT_ARBORIST_INTERNAL_ROOT__" &&
+      targetDirectoryId
+    ) {
+      moveRootMemoToDirectory.mutate({
+        memoId,
+        targetDirectoryId,
+      });
+      return;
+    }
+
     if (parentDirectoryId && targetDirectoryId) {
       moveMemoToDirectory.mutate({
         memoId,
@@ -114,12 +131,6 @@ export default function useMemoActionsInServer(directory: string | null) {
     }
     if (parentDirectoryId && !targetDirectoryId) {
       moveMemoToRoot.mutate({ memoId, parentDirectoryId });
-    }
-    if (targetDirectoryId && !parentDirectoryId) {
-      moveRootMemoToDirectory.mutate({
-        memoId,
-        targetDirectoryId,
-      });
     }
   };
 
