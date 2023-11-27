@@ -43,15 +43,24 @@ export default function Memo() {
     }
   }, [tempUserId]) as Directory | undefined;
 
-  const { uploadLocalMemoStoreToServer, memoStoreQuery } = useMemoStore();
+  const {
+    uploadLocalMemoStoreToServer,
+    addMemoStoreAfterFirstLogin,
+    memoStoreQuery,
+  } = useMemoStore();
 
   const initializeAppAfterFirstLogin = useCallback(() => {
     const afterAuth = localStorage.getItem(AFTER_AUTH_KEY);
     if (!afterAuth) {
-      memoStore && uploadLocalMemoStoreToServer.mutate({ memoStore });
-      localStorage.setItem(AFTER_AUTH_KEY, AFTER_AUTH_KEY);
+      try {
+        addMemoStoreAfterFirstLogin.mutate();
+        memoStore && uploadLocalMemoStoreToServer.mutate({ memoStore });
+        localStorage.setItem(AFTER_AUTH_KEY, AFTER_AUTH_KEY);
+      } catch (error) {
+        localStorage.removeItem(AFTER_AUTH_KEY);
+      }
     }
-  }, [memoStore, uploadLocalMemoStoreToServer]);
+  }, [memoStore, uploadLocalMemoStoreToServer, addMemoStoreAfterFirstLogin]);
 
   useEffect(() => {
     if (user) {

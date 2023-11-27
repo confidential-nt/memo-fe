@@ -2,6 +2,10 @@ import axios from "axios";
 import { MemoApiRoute } from "../../common/route";
 import { Directory } from "../../types/Memo.types";
 
+export async function addMemoStoreAfterFirstLogin() {
+  return axios.post(MemoApiRoute.ROOT_MEMO_STORE).catch(console.log);
+}
+
 export async function getMemoStore() {
   return axios
     .get(MemoApiRoute.ROOT_MEMO_STORE)

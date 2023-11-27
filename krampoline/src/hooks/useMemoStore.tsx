@@ -18,6 +18,7 @@ import {
   moveDirectoryToDirectory as moveDirectoryToDirectoryAPI,
   moveDirectoryToRoot as moveDirectoryToRootAPI,
   uploadLocalMemoStoreToServer as uploadLocalMemoStoreToServerAPI,
+  addMemoStoreAfterFirstLogin as addMemoStoreAfterFirstLoginAPI,
 } from "../service/http-requests/memo-api";
 import { Directory } from "../types/Memo.types";
 
@@ -34,6 +35,15 @@ export default function useMemoStore() {
     },
     staleTime: 1000 * 60 * 60,
     enabled: !!user,
+  });
+
+  const addMemoStoreAfterFirstLogin = useMutation({
+    mutationFn: () => addMemoStoreAfterFirstLoginAPI(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [baseQuery, user?.email],
+      });
+    },
   });
 
   const addRootDirectory = useMutation({
@@ -270,5 +280,6 @@ export default function useMemoStore() {
     moveDirectoryToDirectory,
     moveDirectoryToRoot,
     uploadLocalMemoStoreToServer,
+    addMemoStoreAfterFirstLogin,
   };
 }
