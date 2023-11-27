@@ -29,12 +29,11 @@ function Todo() {
         ...todosWithDatesConverted,
         ...(transformData(todoQuery.data, true) as TodoItem[]),
       ]);
-      console.log(todos);
     } else {
       setTodos([]);
     }
   }, [todoQuery.data]);
-
+  console.log(todos);
   const today = new Date();
 
   const todayTodos = todos.filter(
