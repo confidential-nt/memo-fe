@@ -90,7 +90,6 @@ export default function Memo() {
   };
 
   const handleCreate = ({ type, ...args }: onCreateArgs) => {
-    alert(user);
     if (user) {
       onCreateInServer({ type, ...args });
       return null;
@@ -156,10 +155,10 @@ export default function Memo() {
         className="hidden md:block md:ml-3"
         onClickDirectory={onClickDirectory}
         onClickMemo={onClickMemo}
-        onCreate={onCreate}
-        onDelete={onDelete}
-        onRename={onRename}
-        onMove={onMove}
+        onCreate={handleCreate}
+        onDelete={handleDelete}
+        onRename={handleRename}
+        onMove={handleMove}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         open={isDrawerOpened}
