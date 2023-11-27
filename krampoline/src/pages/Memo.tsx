@@ -92,6 +92,7 @@ export default function Memo() {
 
   const handleCreate = useCallback(
     ({ type, ...args }: onCreateArgs) => {
+      console.log(user);
       if (user) {
         onCreateInServer({ type, ...args });
         return null;
