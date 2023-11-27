@@ -15,7 +15,12 @@ export default function Header() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    addQuickInputTodo.mutate({ todo: value });
+    addQuickInputTodo.mutate(
+      { todo: value },
+      {
+        onSuccess: () => setValue(""),
+      }
+    );
   };
 
   return (
@@ -24,7 +29,9 @@ export default function Header() {
         <input
           type="text"
           className="w-full h-[2rem] block border-2 border-black rounded-[15px] shadow-standard mr-5 p-1 disabled:cursor-not-allowed"
-          placeholder="ex)#todo 내일까지 과제하기(로그인 후 사용가능)"
+          placeholder={`ex)내일까지 과제하기${
+            !user ? "(로그인 후 사용가능)" : ""
+          }`}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           disabled={!user}
