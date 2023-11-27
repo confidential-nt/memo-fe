@@ -57,4 +57,5 @@ export const TodoApiRoute = {
     return BASE_URL + `/api/todos/${todoId}`;
   },
   TO_DO_IN_PROGRESS: BASE_URL + "/api/todos/in-progress",
+  TO_DO_QUICK_INPUT: BASE_URL + "/api/input",
 };
