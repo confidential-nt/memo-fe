@@ -90,7 +90,7 @@ export default function Memo() {
   };
 
   const handleCreate = ({ type, ...args }: onCreateArgs) => {
-    console.log(user);
+    alert(user);
     if (user) {
       onCreateInServer({ type, ...args });
       return null;
