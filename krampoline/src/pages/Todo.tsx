@@ -17,6 +17,10 @@ function Todo() {
 
   useEffect(() => {
     const initialTodosJSON = localStorage.getItem("eventsData");
+    const tempTodos = [];
+    if (todoQuery.data) {
+      tempTodos.push(...(transformData(todoQuery.data, true) as TodoItem[]));
+    }
     if (initialTodosJSON) {
       const initialTodos = JSON.parse(initialTodosJSON) as TodoItem[];
       const todosWithDatesConverted = initialTodos.map((todo) => ({
@@ -24,16 +28,11 @@ function Todo() {
         start: new Date(todo.start),
         end: new Date(todo.end),
       }));
-      console.log(todoQuery.data);
-      setTodos([
-        ...todosWithDatesConverted,
-        ...(transformData(todoQuery.data, true) as TodoItem[]),
-      ]);
-    } else {
-      setTodos([]);
+      tempTodos.push(...todosWithDatesConverted);
     }
+    setTodos(tempTodos);
   }, [todoQuery.data]);
-  console.log(todos);
+
   const today = new Date();
 
   const todayTodos = todos.filter(
