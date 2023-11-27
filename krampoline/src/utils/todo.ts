@@ -8,9 +8,9 @@ type TodoFromServer = {
   updatedAt: string;
 };
 
-export function transformData(todos: TodoFromServer[]) {
+export function transformData(todos: TodoFromServer[], IdNumber?: boolean) {
   return todos.map((todo) => ({
-    id: String(todo.id),
+    id: IdNumber ? todo.id : String(todo.id),
     title: todo.content,
     start: new Date(todo.startTime),
     end: new Date(todo.endTime),

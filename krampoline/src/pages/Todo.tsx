@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import Tasks from "../components/todo/Tasks";
+import useTodo from "../hooks/useTodo";
+import { transformData } from "../utils/todo";
 
 export type TodoItem = {
   id: number;
@@ -11,6 +13,7 @@ export type TodoItem = {
 
 function Todo() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
+  const { todoQuery } = useTodo();
 
   useEffect(() => {
     const initialTodosJSON = localStorage.getItem("eventsData");
@@ -22,7 +25,10 @@ function Todo() {
         end: new Date(todo.end),
       }));
 
-      setTodos(todosWithDatesConverted);
+      setTodos([
+        ...todosWithDatesConverted,
+        ...(transformData(todoQuery.data, true) as TodoItem[]),
+      ]);
     } else {
       setTodos([]);
     }
