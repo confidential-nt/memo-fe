@@ -1,5 +1,6 @@
 import axios from "axios";
 import { TodoApiRoute } from "../../common/route";
+import { Event } from "../../pages/MyCalendar";
 
 export async function getTodos() {
   return axios
@@ -21,15 +22,25 @@ export async function getTodosInProgress() {
     .catch(console.log);
 }
 
-export async function addTodo() {
-  return axios.post(TodoApiRoute.TO_DOS, {});
+export async function addTodo(todo: Event) {
+  return axios.post(TodoApiRoute.TO_DOS, {
+    content: todo.title,
+    status: todo.status,
+    start: todo.start,
+    end: todo.end,
+  });
 }
 
 export async function deleteTodo(todoId: string) {
   return axios.delete(TodoApiRoute.TO_DO(todoId));
 }
-export async function updateTodo(todoId: string) {
-  return axios.patch(TodoApiRoute.TO_DO(todoId));
+export async function updateTodo(todoId: string, todo: Event) {
+  return axios.patch(TodoApiRoute.TO_DO(todoId), {
+    content: todo.title,
+    status: todo.status,
+    start: todo.start,
+    end: todo.end,
+  });
 }
 
 export async function addQuickInputTodo(todo: string) {

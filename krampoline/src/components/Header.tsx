@@ -2,18 +2,20 @@ import { FormEvent, useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
-import { addQuickInputTodo } from "../service/http-requests/todo-api";
+import useTodo from "../hooks/useTodo";
 
 export default function Header() {
   const { pathname } = useLocation();
   const { user } = useAuthContext();
   const [value, setValue] = useState("");
 
+  const { addQuickInputTodo } = useTodo();
+
   useEffect(() => {}, [pathname]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    addQuickInputTodo(value).then(() => alert("성공! 새로고침 해주세요!"));
+    addQuickInputTodo.mutate({ todo: value });
   };
 
   return (
