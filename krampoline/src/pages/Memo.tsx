@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import {
   Directory,
@@ -90,52 +89,42 @@ export default function Memo() {
     setDirectory(id);
   };
 
-  const handleCreate = useCallback(
-    ({ type, ...args }: onCreateArgs) => {
-      console.log(user);
-      if (user) {
-        onCreateInServer({ type, ...args });
-        return null;
-      }
-      onCreate({ type, ...args });
-
+  const handleCreate = ({ type, ...args }: onCreateArgs) => {
+    console.log(user);
+    if (user) {
+      onCreateInServer({ type, ...args });
       return null;
-    },
-    [user]
-  );
+    }
+    onCreate({ type, ...args });
 
-  const handleDelete = useCallback(
-    ({ ids, nodes }: onDeleteArgs) => {
-      if (user) {
-        onDeleteInServer({ ids, nodes });
-        return;
-      }
-      onDelete({ ids, nodes });
-    },
-    [user]
-  );
-
-  const handleRename = useCallback(
-    ({ id, name, node }: onRenameArgs) => {
-      if (user) {
-        onRenameInServer({ id, name, node });
-        return;
-      }
-      onRename({ id, name, node });
-    },
-    [user]
-  );
-
-  const handleMove = useCallback(
-    ({ dragIds, dragNodes, parentId, ...args }: onMoveArgs) => {
-      if (user) {
-        onMoveInServer({ dragIds, dragNodes, parentId, ...args });
-        return;
-      }
-      onMove({ dragIds, dragNodes, parentId, ...args });
-    },
-    [user]
-  );
+    return null;
+  };
+  const handleDelete = ({ ids, nodes }: onDeleteArgs) => {
+    if (user) {
+      onDeleteInServer({ ids, nodes });
+      return;
+    }
+    onDelete({ ids, nodes });
+  };
+  const handleRename = ({ id, name, node }: onRenameArgs) => {
+    if (user) {
+      onRenameInServer({ id, name, node });
+      return;
+    }
+    onRename({ id, name, node });
+  };
+  const handleMove = ({
+    dragIds,
+    dragNodes,
+    parentId,
+    ...args
+  }: onMoveArgs) => {
+    if (user) {
+      onMoveInServer({ dragIds, dragNodes, parentId, ...args });
+      return;
+    }
+    onMove({ dragIds, dragNodes, parentId, ...args });
+  };
 
   return (
     <section className="h-screen pt-3 md:pt-2 md:h-auto md:flex">
