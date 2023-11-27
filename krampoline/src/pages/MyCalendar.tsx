@@ -6,6 +6,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import CalendarDialog from "../components/calendar/CalendarDialog";
 import EditDialog from "../components/calendar/EditDialog";
 import useTodo from "../hooks/useTodo";
+import { transformData } from "../utils/todo";
 // import { useAuthContext } from "../context/AuthContext";
 
 const localizer = luxonLocalizer(DateTime);
@@ -101,7 +102,7 @@ const MyCalendar = () => {
         <>
           <Calendar
             localizer={localizer}
-            events={todoQuery.data || events}
+            events={[...(transformData(todoQuery.data) as Event[]), ...events]}
             startAccessor="start"
             endAccessor="end"
             views={{
