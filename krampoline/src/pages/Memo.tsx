@@ -51,14 +51,20 @@ export default function Memo() {
 
   const initializeAppAfterFirstLogin = useCallback(() => {
     const afterAuth = localStorage.getItem(AFTER_AUTH_KEY);
+    const voidType = undefined as void;
     if (!afterAuth) {
-      try {
-        addMemoStoreAfterFirstLogin.mutate();
-        memoStore && uploadLocalMemoStoreToServer.mutate({ memoStore });
-        localStorage.setItem(AFTER_AUTH_KEY, AFTER_AUTH_KEY);
-      } catch (error) {
-        localStorage.removeItem(AFTER_AUTH_KEY);
-      }
+      addMemoStoreAfterFirstLogin.mutate(voidType, {
+        onSuccess: () => {
+          memoStore &&
+            uploadLocalMemoStoreToServer.mutate(
+              { memoStore },
+              {
+                onSuccess: () =>
+                  localStorage.setItem(AFTER_AUTH_KEY, AFTER_AUTH_KEY),
+              }
+            );
+        },
+      });
     }
   }, [memoStore, uploadLocalMemoStoreToServer, addMemoStoreAfterFirstLogin]);
 
