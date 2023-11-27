@@ -29,9 +29,7 @@ export default function useMemoStore() {
 
   const memoStoreQuery = useQuery({
     queryKey: [baseQuery, user?.email],
-    queryFn: () => {
-      getMemoStore();
-    },
+    queryFn: () => getMemoStore(),
     staleTime: 1000 * 60 * 60,
     enabled: !!user,
   });
