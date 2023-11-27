@@ -5,6 +5,8 @@ import dayjs from "dayjs";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import CalendarDialog from "../components/calendar/CalendarDialog";
 import EditDialog from "../components/calendar/EditDialog";
+import useTodo from "../hooks/useTodo";
+import { useAuthContext } from "../context/AuthContext";
 
 const localizer = luxonLocalizer(DateTime);
 
@@ -37,6 +39,8 @@ export type Event = {
 };
 
 const MyCalendar = () => {
+  const { todoQuery } = useTodo();
+  const { user } = useAuthContext();
   const [events, setEvents] = useState<Event[]>(() =>
     readTodosFromLocalStorage()
   );
@@ -97,7 +101,7 @@ const MyCalendar = () => {
         <>
           <Calendar
             localizer={localizer}
-            events={events}
+            events={todoQuery.data || events}
             startAccessor="start"
             endAccessor="end"
             views={{
