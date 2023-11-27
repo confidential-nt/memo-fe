@@ -10,7 +10,10 @@ export async function getMemoStore() {
 }
 
 export async function uploadLocalMemoStoreToServer(memoStore: Directory) {
-  return axios.post(MemoApiRoute.MEMOSTORE_SYNC, memoStore);
+  return axios.post(MemoApiRoute.MEMOSTORE_SYNC, {
+    directories: memoStore.directories,
+    memos: memoStore.memos,
+  });
 }
 
 export async function addRootDirectory(name: string = "새 폴더") {
