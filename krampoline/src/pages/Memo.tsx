@@ -58,7 +58,8 @@ export default function Memo() {
           }
         );
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memoStore]);
 
   useEffect(() => {
     if (user) {
