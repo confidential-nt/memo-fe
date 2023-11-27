@@ -58,7 +58,7 @@ export default function Memo() {
           }
         );
     }
-  }, [memoStore, uploadLocalMemoStoreToServer]);
+  }, []);
 
   useEffect(() => {
     if (user) {
