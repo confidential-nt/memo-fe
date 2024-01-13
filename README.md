@@ -33,6 +33,7 @@
    ```
 3. 필요한 의존성을 설치합니다:
    ```bash
+   cd krampoline
    npm install
    ```
 4. 개발 서버를 시작합니다:
