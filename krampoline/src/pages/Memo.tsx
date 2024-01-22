@@ -1,4 +1,4 @@
-import { Suspense, lazy, useCallback, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { Directory, Memo as MemoType } from "../types/Memo.types";
 import { useUserContext } from "../context/UserContext";
 import { getAllMemoStoreQuery } from "../service/database/api";
@@ -7,8 +7,8 @@ import TreeViewHOC from "../components/memo/TreeViewHOC";
 import { LuFolderTree } from "react-icons/lu";
 import { useAuthContext } from "../context/AuthContext";
 import useMemoStore from "../hooks/useMemoStore";
-import { AFTER_AUTH_KEY } from "../common/local-storage";
 import useAllActions from "../hooks/useAllActions";
+import { initializeAppAfterFirstLogin } from "../utils/memo";
 
 const TextEditor = lazy(() => import("../components/memo/TextEditor"));
 
@@ -32,27 +32,14 @@ export default function Memo() {
 
   const { uploadLocalMemoStoreToServer, memoStoreQuery } = useMemoStore();
 
-  const initializeAppAfterFirstLogin = useCallback(() => {
-    const afterAuth = localStorage.getItem(AFTER_AUTH_KEY);
-
-    if (!afterAuth) {
-      memoStore &&
-        uploadLocalMemoStoreToServer.mutate(
-          { memoStore },
-          {
-            onSuccess: () =>
-              localStorage.setItem(AFTER_AUTH_KEY, AFTER_AUTH_KEY),
-          }
-        );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memoStore]);
-
   useEffect(() => {
     if (user) {
-      initializeAppAfterFirstLogin();
+      initializeAppAfterFirstLogin(
+        memoStore,
+        uploadLocalMemoStoreToServer.mutate
+      );
     }
-  }, [initializeAppAfterFirstLogin, user]);
+  }, [memoStore, user, uploadLocalMemoStoreToServer]);
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {

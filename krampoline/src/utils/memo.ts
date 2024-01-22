@@ -1,4 +1,24 @@
+import { MutateOptions } from "@tanstack/react-query";
+import { MemoStore } from "../service/types/db.types";
 import { Directory, Memo, TreeNode } from "../types/Memo.types";
+import { AxiosResponse } from "axios";
+import { AFTER_AUTH_KEY } from "../common/local-storage";
+
+type MutationFunction = (
+  variables: {
+    memoStore: Directory;
+  },
+  options?:
+    | MutateOptions<
+        AxiosResponse<unknown, unknown>,
+        Error,
+        {
+          memoStore: Directory;
+        },
+        unknown
+      >
+    | undefined
+) => void;
 
 export function transformData(
   inputData: Directory | Memo,
@@ -48,4 +68,22 @@ export function detectOS() {
   if (/iPhone|iPad|iPod/.test(userAgent)) return "iOS";
 
   return "Unknown OS";
+}
+
+export function initializeAppAfterFirstLogin(
+  memoStore?: MemoStore,
+  mutateFunction?: MutationFunction
+) {
+  const afterAuth = localStorage.getItem(AFTER_AUTH_KEY);
+
+  if (!afterAuth) {
+    memoStore &&
+      mutateFunction &&
+      mutateFunction(
+        { memoStore },
+        {
+          onSuccess: () => localStorage.setItem(AFTER_AUTH_KEY, AFTER_AUTH_KEY),
+        }
+      );
+  }
 }
