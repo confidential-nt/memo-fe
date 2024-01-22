@@ -1,22 +1,14 @@
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
-import {
-  Directory,
-  Memo as MemoType,
-  onCreateArgs,
-  onDeleteArgs,
-  onMoveArgs,
-  onRenameArgs,
-} from "../types/Memo.types";
+import { Directory, Memo as MemoType } from "../types/Memo.types";
 import { useUserContext } from "../context/UserContext";
 import { getAllMemoStoreQuery } from "../service/database/api";
 import { useLiveQuery } from "dexie-react-hooks";
 import TreeViewHOC from "../components/memo/TreeViewHOC";
-import useMemoActions from "../hooks/useMemoActions";
 import { LuFolderTree } from "react-icons/lu";
 import { useAuthContext } from "../context/AuthContext";
 import useMemoStore from "../hooks/useMemoStore";
-import useMemoActionsInServer from "../hooks/useMemoActionsInServer";
 import { AFTER_AUTH_KEY } from "../common/local-storage";
+import useAllActions from "../hooks/useAllActions";
 
 const TextEditor = lazy(() => import("../components/memo/TextEditor"));
 
@@ -28,13 +20,8 @@ export default function Memo() {
 
   const { tempUserId } = useUserContext();
   const { user } = useAuthContext();
-  const { onCreate, onDelete, onMove, onRename } = useMemoActions(directory);
-  const {
-    onCreate: onCreateInServer,
-    onDelete: onDeleteInServer,
-    onMove: onMoveInServer,
-    onRename: onRenameInServer,
-  } = useMemoActionsInServer(directory);
+  const { handleCreate, handleDelete, handleMove, handleRename } =
+    useAllActions(directory, user);
 
   const memoStore = useLiveQuery(async () => {
     if (tempUserId) {
@@ -87,42 +74,6 @@ export default function Memo() {
 
   const onClickDirectory = (id: string | null) => {
     setDirectory(id);
-  };
-
-  const handleCreate = ({ type, ...args }: onCreateArgs) => {
-    if (user) {
-      onCreateInServer({ type, ...args });
-      return null;
-    }
-    onCreate({ type, ...args });
-
-    return null;
-  };
-  const handleDelete = ({ ids, nodes }: onDeleteArgs) => {
-    if (user) {
-      onDeleteInServer({ ids, nodes });
-      return;
-    }
-    onDelete({ ids, nodes });
-  };
-  const handleRename = ({ id, name, node }: onRenameArgs) => {
-    if (user) {
-      onRenameInServer({ id, name, node });
-      return;
-    }
-    onRename({ id, name, node });
-  };
-  const handleMove = ({
-    dragIds,
-    dragNodes,
-    parentId,
-    ...args
-  }: onMoveArgs) => {
-    if (user) {
-      onMoveInServer({ dragIds, dragNodes, parentId, ...args });
-      return;
-    }
-    onMove({ dragIds, dragNodes, parentId, ...args });
   };
 
   return (
