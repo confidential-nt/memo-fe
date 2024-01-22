@@ -1,34 +1,28 @@
 import { Suspense, lazy, useEffect, useState } from "react";
-import { Directory, Memo as MemoType } from "../types/Memo.types";
+import { Memo as MemoType } from "../types/Memo.types";
 import { useUserContext } from "../context/UserContext";
-import { getAllMemoStoreQuery } from "../service/database/api";
-import { useLiveQuery } from "dexie-react-hooks";
 import TreeViewHOC from "../components/memo/TreeViewHOC";
 import { LuFolderTree } from "react-icons/lu";
 import { useAuthContext } from "../context/AuthContext";
 import useMemoStore from "../hooks/useMemoStore";
 import useAllActions from "../hooks/useAllActions";
 import { initializeAppAfterFirstLogin } from "../utils/memo";
+import useIndexedDBMemoStore from "../hooks/useIndexedDBMemoStore";
 
 const TextEditor = lazy(() => import("../components/memo/TextEditor"));
 
 export default function Memo() {
   const [isDrawerOpened, setDrawerOpened] = useState(false);
-
   const [memo, setMemo] = useState<MemoType | null>(null);
   const [directory, setDirectory] = useState<string | null>(null);
 
   const { tempUserId } = useUserContext();
   const { user } = useAuthContext();
+
   const { handleCreate, handleDelete, handleMove, handleRename } =
     useAllActions(directory, user);
 
-  const memoStore = useLiveQuery(async () => {
-    if (tempUserId) {
-      const result = await getAllMemoStoreQuery(tempUserId);
-      return result;
-    }
-  }, [tempUserId]) as Directory | undefined;
+  const { memoStore } = useIndexedDBMemoStore(tempUserId);
 
   const { uploadLocalMemoStoreToServer, memoStoreQuery } = useMemoStore();
 
