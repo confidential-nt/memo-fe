@@ -1,5 +1,4 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import React from "react";
 import { getAllMemoStoreQuery } from "../service/database/api";
 import { Directory } from "../types/Memo.types";
 
