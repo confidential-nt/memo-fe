@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 import { Memo as MemoType } from "../types/Memo.types";
 import { useUserContext } from "../context/UserContext";
-import TreeViewHOC from "../components/memo/TreeViewHOC";
+// import TreeViewHOC from "../components/memo/TreeViewHOC";
 import { LuFolderTree } from "react-icons/lu";
 import { useAuthContext } from "../context/AuthContext";
 import useMemoStore from "../hooks/useMemoStore";
@@ -10,6 +10,7 @@ import useIndexedDBMemoStore from "../hooks/useIndexedDBMemoStore";
 import TreeViewContextProvider from "../context/TreeViewContext";
 
 const TextEditor = lazy(() => import("../components/memo/TextEditor"));
+const TreeViewHOC = lazy(() => import("../components/memo/TreeViewHOC"));
 
 export default function Memo() {
   const [isDrawerOpened, setDrawerOpened] = useState(false);
@@ -65,13 +66,17 @@ export default function Memo() {
         open={isDrawerOpened}
       >
         <>
-          <TreeViewHOC className="md:hidden" />
+          <Suspense fallback={<p className="md:hidden">loading...</p>}>
+            <TreeViewHOC className="md:hidden" />
+          </Suspense>
           <div className="md:grow">
-            <Suspense fallback={<p>loading...</p>}>
+            <Suspense fallback={<p className="">loading...</p>}>
               <TextEditor memo={memo} />
             </Suspense>
           </div>
-          <TreeViewHOC className="hidden md:block md:ml-3" />
+          <Suspense fallback={<p>loading...</p>}>
+            <TreeViewHOC className="hidden md:block md:ml-3" />
+          </Suspense>
         </>
       </TreeViewContextProvider>
     </section>
