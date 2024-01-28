@@ -58,4 +58,4 @@
 
 ## 구름 우수 프로젝트 수상자 포트폴리오 링크
 
-[포트폴리오 바로가기](https://www.notion.so/6s-60f3fc9584694337bf4dc57e30db6bcc?pvs=4)
+[포트폴리오 바로가기](https://confidential.notion.site/KDT-1-5f730b41df4f4195875c71a3864be958?pvs=4)
