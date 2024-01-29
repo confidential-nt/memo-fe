@@ -1,13 +1,14 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 import { Memo as MemoType } from "../types/Memo.types";
 import { useUserContext } from "../context/UserContext";
-// import TreeViewHOC from "../components/memo/TreeViewHOC";
 import { LuFolderTree } from "react-icons/lu";
 import { useAuthContext } from "../context/AuthContext";
 import useMemoStore from "../hooks/useMemoStore";
 import { initializeAppAfterFirstLogin } from "../utils/memo";
 import useIndexedDBMemoStore from "../hooks/useIndexedDBMemoStore";
 import TreeViewContextProvider from "../context/TreeViewContext";
+import TextEditorPlaceholder from "../components/placeholder/TextEditorPlaceholder";
+import TreeViewPlaceholder from "../components/placeholder/TreeViewPlaceholder";
 
 const TextEditor = lazy(() => import("../components/memo/TextEditor"));
 const TreeViewHOC = lazy(() => import("../components/memo/TreeViewHOC"));
@@ -66,15 +67,19 @@ export default function Memo() {
         open={isDrawerOpened}
       >
         <>
-          <Suspense fallback={<p className="md:hidden">loading...</p>}>
+          <Suspense fallback={<TreeViewPlaceholder className="md:hidden" />}>
             <TreeViewHOC className="md:hidden" />
           </Suspense>
           <div className="md:grow">
-            <Suspense fallback={<p className="">loading...</p>}>
+            <Suspense fallback={<TextEditorPlaceholder />}>
               <TextEditor memo={memo} />
             </Suspense>
           </div>
-          <Suspense fallback={<p>loading...</p>}>
+          <Suspense
+            fallback={
+              <TreeViewPlaceholder className="hidden md:block md:w-[300px] md:ml-3" />
+            }
+          >
             <TreeViewHOC className="hidden md:block md:ml-3" />
           </Suspense>
         </>
