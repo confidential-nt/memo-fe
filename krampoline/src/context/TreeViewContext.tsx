@@ -9,18 +9,14 @@ import {
 } from "../types/Memo.types";
 import { useAuthContext } from "./AuthContext";
 import useAllActions from "../hooks/useAllActions";
+import useMemoes from "../hooks/useMemoes";
+import useDrawer from "../hooks/useDrawer";
+import { useUserContext } from "./UserContext";
+import useIndexedDBMemoStore from "../hooks/useIndexedDBMemoStore";
+import useMemoStore from "../hooks/useMemoStore";
 
 type Props = {
   children: React.ReactElement;
-  memoStore?: Directory;
-  onClickMemo: (memo: Memo | null) => void;
-  onClose: (
-    event: React.KeyboardEvent<Element> | React.MouseEvent<Element, MouseEvent>
-  ) => void;
-  onOpen: (
-    event: React.KeyboardEvent<Element> | React.MouseEvent<Element, MouseEvent>
-  ) => void;
-  open: boolean;
 };
 
 type TreeViewContextProps = {
@@ -54,18 +50,16 @@ const TreeViewContext = createContext<TreeViewContextProps>({
   memoStore: undefined,
 });
 
-export default function TreeViewContextProvider({
-  children,
-  memoStore,
-  onClickMemo,
-  onClose,
-  onOpen,
-  open,
-}: Props) {
+export default function TreeViewContextProvider({ children }: Props) {
   // 바깥에서부터 받아야하는 거 빼고 전부 이 안에서...
   const [directory, setDirectory] = useState<string | null>(null);
+  const { tempUserId } = useUserContext();
   const { user } = useAuthContext();
 
+  const { onClickMemo } = useMemoes();
+  const { toggleDrawer, isDrawerOpened } = useDrawer();
+  const { memoStore } = useIndexedDBMemoStore(tempUserId);
+  const { memoStoreQuery } = useMemoStore();
   const { handleCreate, handleDelete, handleMove, handleRename } =
     useAllActions(directory, user);
 
@@ -80,10 +74,10 @@ export default function TreeViewContextProvider({
           setDirectory(id);
         },
         onClickMemo,
-        onClose,
-        onOpen,
-        open,
-        memoStore,
+        onClose: toggleDrawer(false),
+        onOpen: toggleDrawer(true),
+        open: isDrawerOpened,
+        memoStore: memoStoreQuery.data || memoStore,
       }}
     >
       {children}

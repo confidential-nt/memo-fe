@@ -1,5 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from "react";
-import { Memo as MemoType } from "../types/Memo.types";
+import { Suspense, lazy, useEffect } from "react";
 import { useUserContext } from "../context/UserContext";
 import { LuFolderTree } from "react-icons/lu";
 import { useAuthContext } from "../context/AuthContext";
@@ -9,20 +8,22 @@ import useIndexedDBMemoStore from "../hooks/useIndexedDBMemoStore";
 import TreeViewContextProvider from "../context/TreeViewContext";
 import TextEditorPlaceholder from "../components/placeholder/TextEditorPlaceholder";
 import TreeViewPlaceholder from "../components/placeholder/TreeViewPlaceholder";
+import useMemoes from "../hooks/useMemoes";
+import useDrawer from "../hooks/useDrawer";
 
 const TextEditor = lazy(() => import("../components/memo/TextEditor"));
 const TreeViewHOC = lazy(() => import("../components/memo/TreeViewHOC"));
 
 export default function Memo() {
-  const [isDrawerOpened, setDrawerOpened] = useState(false);
-  const [memo, setMemo] = useState<MemoType | null>(null);
-
   const { tempUserId } = useUserContext();
   const { user } = useAuthContext();
 
+  const { memo } = useMemoes();
+  const { isDrawerOpened, toggleDrawer } = useDrawer();
+
   const { memoStore } = useIndexedDBMemoStore(tempUserId);
 
-  const { uploadLocalMemoStoreToServer, memoStoreQuery } = useMemoStore();
+  const { uploadLocalMemoStoreToServer } = useMemoStore();
 
   useEffect(() => {
     if (user) {
@@ -33,24 +34,6 @@ export default function Memo() {
     }
   }, [memoStore, user, uploadLocalMemoStoreToServer]);
 
-  const toggleDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event &&
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
-
-      setDrawerOpened(open);
-    };
-
-  const onClickMemo = (memo: MemoType | null) => {
-    setMemo(memo);
-  };
-
   return (
     <section className="h-screen pt-3 md:pt-2 md:h-auto md:flex">
       <button
@@ -59,13 +42,7 @@ export default function Memo() {
       >
         <LuFolderTree className="text-white" />
       </button>
-      <TreeViewContextProvider
-        memoStore={memoStoreQuery.data || memoStore}
-        onClickMemo={onClickMemo}
-        onClose={toggleDrawer(false)}
-        onOpen={toggleDrawer(true)}
-        open={isDrawerOpened}
-      >
+      <TreeViewContextProvider>
         <>
           <Suspense fallback={<TreeViewPlaceholder className="md:hidden" />}>
             <TreeViewHOC className="md:hidden" />
