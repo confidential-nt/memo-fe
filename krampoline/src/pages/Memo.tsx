@@ -6,7 +6,7 @@ import useMemoStore from "../hooks/useMemoStore";
 import { initializeAppAfterFirstLogin } from "../utils/memo";
 import useIndexedDBMemoStore from "../hooks/useIndexedDBMemoStore";
 import useDrawer from "../hooks/useDrawer";
-import TreeViewContainer from "../components/memo/TreeViewContainer";
+import ContentContainer from "../components/memo/ContentContainer";
 
 export default function Memo() {
   const { tempUserId } = useUserContext();
@@ -35,7 +35,7 @@ export default function Memo() {
       >
         <LuFolderTree className="text-white" />
       </button>
-      <TreeViewContainer />
+      <ContentContainer />
     </section>
   );
 }

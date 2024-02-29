@@ -1,6 +1,6 @@
 import { BsFileEarmarkPlus } from "react-icons/bs";
 import { AiOutlineFolderAdd } from "react-icons/ai";
-import { onCreateArgs } from "../../types/Memo.types";
+import { onCreateArgs } from "../../../types/Memo.types";
 import { IdObj } from "react-arborist/dist/types/utils";
 
 type Props = {

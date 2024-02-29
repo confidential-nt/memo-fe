@@ -1,6 +1,6 @@
-import Drawer from "./drawer/Drawer";
+import Drawer from "../drawer/Drawer";
 import TreeView from "./TreeView";
-import { useTreeViewContext } from "../../context/TreeViewContext";
+import { useTreeViewContext } from "../../../context/TreeViewContext";
 
 type Props = {
   className: string;
