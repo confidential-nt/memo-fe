@@ -3,5 +3,5 @@ type Props = {
 };
 
 export default function TreeViewPlaceholder({ className }: Props) {
-  return <p className={className}>loading...</p>;
+  return <p className={className}>Loading...</p>;
 }
