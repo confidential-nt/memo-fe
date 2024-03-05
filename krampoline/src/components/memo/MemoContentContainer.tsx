@@ -3,7 +3,7 @@ import TreeViewPlaceholder from "../placeholder/TreeViewPlaceholder";
 import TextEditorContainer from "./text-editor/TextEditorContainer";
 import { TreeView } from "./tree-view/exports/exports";
 
-export default function ContentContainer() {
+export default function MemoContentContainer() {
   return (
     <TreeView>
       <>
