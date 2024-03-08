@@ -6,7 +6,7 @@ import { transformData } from "../utils/todo";
 export type TodoItem = {
   id: number;
   title: string;
-  status: string;
+  status: "completed" | "active";
   start: Date;
   end: Date;
 };

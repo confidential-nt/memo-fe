@@ -1,8 +1,8 @@
 import { useState, ChangeEvent, useEffect } from "react";
-import Checkbox from "@mui/material/Checkbox";
-import { MdOutlineCreate, MdOutlineSaveAlt } from "react-icons/md";
-import { HiOutlineBackspace, HiOutlineTrash } from "react-icons/hi";
+import TaskContent from "./TaskContent";
+
 import { TodoItem } from "../../pages/Todo";
+import TaskForm from "./TaskForm";
 
 type Props = {
   todo: TodoItem;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 function Task({ todo, onUpdate, onDelete }: Props) {
-  const { id, title, status } = todo;
+  const { id, title } = todo;
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(title);
 
@@ -45,63 +45,23 @@ function Task({ todo, onUpdate, onDelete }: Props) {
     }
   }, [id]);
 
-  if (isEditing) {
-    return (
-      <li className="flex justify-between items-center w-30 h-12 shrink-0 border-black border-2 rounded-[15px] shadow-standard bg-white my-4">
-        <div className="w-full justify-left mx-4 items-center">
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              value={editedContent}
-              onChange={handleEditChange}
-              className="w-full h-[2rem] flex p-1 border-none text-gray-400"
-            />
-          </form>
-        </div>
-        <span className="flex justify-right items-center">
-          <MdOutlineSaveAlt
-            type="submit"
-            onClick={handleSubmit}
-            className="w-6 h-6 shrink-0 mx-1 cursor-pointer"
-          />
-          <HiOutlineBackspace
-            onClick={() => setIsEditing(false)}
-            className="w-6 h-6 shrink-0 mx-1 cursor-pointer"
-          />
-        </span>
-      </li>
-    );
-  }
   return (
     <li className="flex justify-between items-center w-30 h-12 shrink-0 border-black border-2 rounded-[15px] shadow-standard bg-white my-4">
-      <div className="flex justify-left items-center">
-        <Checkbox
-          id={id.toString()}
-          checked={status === "completed"}
+      {isEditing ? (
+        <TaskForm
+          onEditChange={handleEditChange}
+          onSubmit={handleSubmit}
+          onChangeEditState={() => setIsEditing(false)}
+          editedContent={editedContent}
+        />
+      ) : (
+        <TaskContent
+          {...todo}
           onChange={handleChange}
-          color="secondary"
-          className="cursor-pointer"
+          onChangeEditState={() => setIsEditing(true)}
+          onDelete={handleDelete}
         />
-        <label
-          htmlFor={id.toString()}
-          className="flex justify-left items-center"
-          style={{
-            textDecoration: status === "completed" ? "line-through" : "none",
-          }}
-        >
-          {title}
-        </label>
-      </div>
-      <span className="flex justify-right items-center">
-        <MdOutlineCreate
-          onClick={() => setIsEditing(true)}
-          className="w-6 h-6 shrink-0 mx-1 cursor-pointer"
-        />
-        <HiOutlineTrash
-          onClick={handleDelete}
-          className="w-6 h-6 shrink-0 mx-1 cursor-pointer"
-        />
-      </span>
+      )}
     </li>
   );
 }
