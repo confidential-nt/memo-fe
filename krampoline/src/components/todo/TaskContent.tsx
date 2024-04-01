@@ -25,6 +25,7 @@ export default function TaskContent({
           onChange={onChange}
           color="secondary"
           className="cursor-pointer"
+          aria-label="할 일 상태 변경 체크박스"
         />
         <label
           htmlFor={id.toString()}

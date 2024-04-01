@@ -9,6 +9,7 @@ exports[`Task Test > 스냅샷 테스트 1`] = `
       class="flex justify-left items-center"
     >
       <span
+        aria-label="할 일 상태 변경 체크박스"
         class="MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-sizeMedium PrivateSwitchBase-root MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-sizeMedium MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-sizeMedium cursor-pointer css-1sg8fd1-MuiButtonBase-root-MuiCheckbox-root"
       >
         <input
