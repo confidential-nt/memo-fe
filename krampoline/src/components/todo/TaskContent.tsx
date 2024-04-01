@@ -1,8 +1,8 @@
-import React, { ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { MdOutlineCreate } from "react-icons/md";
 import { HiOutlineTrash } from "react-icons/hi";
-import { TodoItem } from "../../pages/Todo";
+import { TodoItem } from "../../types/Todo.types";
 
 export default function TaskContent({
   id,

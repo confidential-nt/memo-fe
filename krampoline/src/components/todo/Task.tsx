@@ -1,8 +1,7 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import TaskContent from "./TaskContent";
-
-import { TodoItem } from "../../pages/Todo";
 import TaskForm from "./TaskForm";
+import { TodoItem } from "../../types/Todo.types";
 
 type Props = {
   todo: TodoItem;

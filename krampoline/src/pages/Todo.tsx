@@ -2,14 +2,7 @@ import { useState, useEffect } from "react";
 import Tasks from "../components/todo/Tasks";
 import useTodo from "../hooks/useTodo";
 import { transformData } from "../utils/todo";
-
-export type TodoItem = {
-  id: number;
-  title: string;
-  status: "completed" | "active";
-  start: Date;
-  end: Date;
-};
+import { TodoItem } from "../types/Todo.types";
 
 function Todo() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
