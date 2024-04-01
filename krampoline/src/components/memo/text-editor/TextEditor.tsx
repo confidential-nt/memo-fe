@@ -2,11 +2,11 @@ import { Editor } from "@tinymce/tinymce-react";
 import { Editor as TinyMCEEditor } from "tinymce";
 import { useCallback, useRef, useState } from "react";
 import debounce from "lodash.debounce";
-import { Memo } from "../../types/Memo.types";
-import { saveMemoContent as saveMemoContentInLocal } from "../../service/database/api";
-import { useAuthContext } from "../../context/AuthContext";
-import { AuthenticatedUser } from "../../types/Auth.types";
-import useMemoActionsInServer from "../../hooks/useMemoActionsInServer";
+import { Memo } from "../../../types/Memo.types";
+import { saveMemoContent as saveMemoContentInLocal } from "../../../service/database/api";
+import { useAuthContext } from "../../../context/AuthContext";
+import { AuthenticatedUser } from "../../../types/Auth.types";
+import useMemoActionsInServer from "../../../hooks/useMemoActionsInServer";
 
 const editorInitConfig = {
   height: "85vh",

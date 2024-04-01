@@ -1,10 +1,10 @@
 import { Tree } from "react-arborist";
-import { Directory } from "../../types/Memo.types";
-import { transformData } from "../../utils/memo";
-import Node from "./node/Node";
+import { Directory } from "../../../types/Memo.types";
+import { transformData } from "../../../utils/memo";
+import Node from "../node/Node";
 
 import TreePannel from "./TreePannel";
-import { useTreeViewContext } from "../../context/TreeViewContext";
+import { useTreeViewContext } from "../../../context/TreeViewContext";
 
 const treeClassname = "tree";
 
